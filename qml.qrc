@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>SettingPage.qml</file>
+        <file>LogInPage.qml</file>
+        <file>images/back.png</file>
+        <file>images/background.jpg</file>
+        <file>images/menu.png</file>
+        <file>MainPage.qml</file>
+        <file>images/lock.png</file>
+        <file>images/setting.png</file>
+        <file>GaugePage.qml</file>
+        <file>images/record.png</file>
+        <file>images/record-active.png</file>
+    </qresource>
+</RCC>

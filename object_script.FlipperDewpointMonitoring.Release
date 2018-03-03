@@ -1,0 +1,16 @@
+INPUT(
+./release\main.o
+./release\flipperinterface.o
+./release\onlinedbinterface.o
+./release\radialbar.o
+./release\flippersettings.o
+./release\flippersettingmodel.o
+./release\flipperdatabase.o
+./release\guiinterface.o
+./release\qrc_qml.o
+./release\moc_flipperinterface.o
+./release\moc_radialbar.o
+./release\moc_flippersettings.o
+./release\moc_flipperdatabase.o
+./release\moc_guiinterface.o
+);

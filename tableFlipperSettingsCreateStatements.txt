@@ -1,0 +1,21 @@
+CREATE TABLE `flippersettings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `depotName` varchar(50) NOT NULL DEFAULT 'DefaultDepot',
+  `flipperIP` varchar(11) NOT NULL DEFAULT '127.0.0.1',
+  `flipperPort` int(11) NOT NULL DEFAULT '502',
+  `decimalPointCH1` int(11) DEFAULT '100',
+  `decimalPointCH2` int(11) DEFAULT '100',
+  `decimalPointCH3` int(11) DEFAULT '100',
+  `decimalPointCH4` int(11) DEFAULT '100',
+  `decimalPointCH5` int(11) DEFAULT '100',
+  `decimalPointCH6` int(11) DEFAULT '100',
+  `notificationMailaddress` varchar(100) DEFAULT NULL,
+  `notificationPassword` varchar(100) DEFAULT NULL,
+  `standAloneMode` tinyint(4) DEFAULT '0',
+  `sendAlertNotification` tinyint(4) DEFAULT '0',
+  `sendDailyNotification` tinyint(4) DEFAULT '0',
+  `channelEnable` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `depotName_UNIQUE` (`depotName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

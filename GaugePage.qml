@@ -147,5 +147,18 @@ Item {
 
             }
         }
+
+        // Timer to load graph the first time, only run one time
+        Timer
+        {
+            id:loadGraphScheduleTimer
+            interval:30000
+            repeat: false
+            running:true
+            onTriggered:
+            {
+
+            }
+        }
     }
 }

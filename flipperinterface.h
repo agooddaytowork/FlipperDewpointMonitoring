@@ -15,7 +15,7 @@ class FlipperInterface: public QObject
 
 public:
     FlipperInterface(const QString &tcpAddr, const int &port, const int &flipperAddr, QObject * parent = 0);
-
+    ~FlipperInterface();
     void setFlipperTcpSettings(const QString &tcpAddr, const int &port, const int &flipperAddr);
     void stop();
     void setDecimalValue(const quint16 &channel, const quint16 &value);

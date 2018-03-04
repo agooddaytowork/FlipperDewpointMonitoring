@@ -12,8 +12,10 @@
 #include "flipperinterface.h"
 #include "guiinterface.h"
 
+
 int main(int argc, char *argv[])
 {
+
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
@@ -41,18 +43,22 @@ int main(int argc, char *argv[])
 
     FlipperDatabase myDatabase((QCoreApplication::applicationDirPath()+"/flipperDatabase.db"));
 
-
-
     GuiInterface aGuiInterface;
 
     // create permanent thread
-    QThread backEndThread;
+    QThread *backEndThread = new QThread();
+    myDatabase.moveToThread(backEndThread);
+    aFlipperInterface.moveToThread(backEndThread);
 
     // Connect everything
-    QObject::connect(&backEndThread,SIGNAL(started()),&myDatabase, SLOT(openDatabase()));
-    //QObject::connect(&theFlipperInterface,SIGNAL(out(QHash<int,QVariant>)),&myDatabase,SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(backEndThread,SIGNAL(started()),&myDatabase, SLOT(openDatabase()));
+    QObject::connect(&myDatabase,SIGNAL(out(QHash<int,QVariant>)),&aGuiInterface,SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(&aGuiInterface,SIGNAL(toDatabase(QHash<int,QVariant>)),&myDatabase,SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(&aGuiInterface,SIGNAL(toFlipperInterface(QHash<int,QVariant>)),&aFlipperInterface,SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(&aFlipperInterface, SIGNAL(out(QHash<int,QVariant>)), &myDatabase, SLOT(in(QHash<int,QVariant>)));
 
 
+    backEndThread->start();
     QQmlContext *thisContext = engine.rootContext();
     // expost FlipperSettings to QML
     thisContext->setContextProperty("theGuiInterface", &aGuiInterface);

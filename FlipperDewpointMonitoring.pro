@@ -50,6 +50,3 @@ HEADERS += \
     guiinterface.h
 
 DISTFILES +=
-
-QMAKE_CXXFLAGS += -mthumb
-QMAKE_CXXFLAGS += -mthumb-interwork

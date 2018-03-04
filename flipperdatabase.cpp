@@ -3,6 +3,11 @@
 
 #define FlipperDatabaseDebug (1)
 
+FlipperDatabase::~FlipperDatabase()
+{
+
+}
+
 FlipperDatabase::FlipperDatabase(const QString &databasePath, QObject *parent): m_databasePath(databasePath), QObject(parent)
 {
 
@@ -33,7 +38,6 @@ void FlipperDatabase::openDatabase()
         qDebug() << "Database Connection OK! ";
 #endif
         createTablesIfNotExists();
-        running = true;
         doWork();
     }
 }
@@ -146,15 +150,32 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
 #endif
     QSqlQuery aQuery;
 
+    int currentTime = QDateTime::currentMSecsSinceEpoch();
     aQuery.prepare("INSERT INTO " + FlipperChannelToString.value(CH) + " (timeStamp, data) VALUES (:time, :data) ");
-    aQuery.bindValue(":time", QDateTime::currentMSecsSinceEpoch());
+    aQuery.bindValue(":time",currentTime );
     aQuery.bindValue(":data", value);
 
     if(aQuery.exec())
     {
 #ifdef FlipperDatabaseDebug
         qDebug() << "Flipper Database: insert succeed";
+        qDebug() << "Flipper Database: Emitting out package";
 #endif
+
+        QHash<int, QVariant> package;
+
+        package.insert(PackageKey, updateGauge);
+        package.insert(FlipperChannel, CH);
+        package.insert(updateGauge, value);
+
+        out(package);
+
+        package.clear();
+        package.insert(PackageKey, updateChart);
+        package.insert(FlipperChannel, CH);
+        package.insert(updateChart, QPointF(currentTime, value));
+
+        out(package);
     }
     else
     {

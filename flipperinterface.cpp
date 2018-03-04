@@ -3,6 +3,13 @@
 
 #define FlipperInterfaceDebug (1)
 
+FlipperInterface::~FlipperInterface()
+{
+    stop();
+    modbusDevice->disconnect();
+
+}
+
 FlipperInterface::FlipperInterface(const QString &tcpAddr, const int &port, const int &flipperAddr, QObject *parent): QObject(parent), m_TCPaddress(tcpAddr), m_TCPport(port), m_FlipperAddress(flipperAddr), m_ChannelEnable(0x00)
 {
 

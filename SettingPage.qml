@@ -53,6 +53,7 @@ Item
                         {
                             id:  depotNameTextField
                             text: flipperSetting.getDepotName();
+
                             onActiveFocusChanged: {
                                 if(activeFocus)
                                 {
@@ -78,6 +79,7 @@ Item
                             implicitWidth: 60
                             inputMethodHints:  Qt.ImhDigitsOnly
                             text: flipperSetting.getSVAddress()
+                            enabled: !theGuiInterface.isRecording
                             onActiveFocusChanged: {
                                 if(activeFocus)
                                 {
@@ -101,6 +103,7 @@ Item
                             id:  ipTextField
                             inputMethodHints:  Qt.ImhDigitsOnly
                             text: flipperSetting.getFlipperIp()
+                            enabled: !theGuiInterface.isRecording
                             onTextChanged:
                             {
                                 flipperSetting.updateFlipperSetting("FlipperIP", ipTextField.text)
@@ -126,6 +129,7 @@ Item
                                 }
                             }
                             text: flipperSetting.getFlipperPort()
+                            enabled: !theGuiInterface.isRecording
                             onTextChanged:
                             {
                                 flipperSetting.updateFlipperSetting("FlipperPort",  Number(portTextField.text))

@@ -12,7 +12,6 @@ ApplicationWindow {
     width: 800
     height: 480
     title: qsTr("Flipper DewPoint Monitoring")
-    property bool isRecording: false
 
     header: ToolBar{
         id:theToolBar
@@ -119,16 +118,17 @@ ApplicationWindow {
                     anchors.margins: -10
                     onClicked:
                     {
-                        if (isRecording == false)
+                        console.log(theGuiInterface.isRecording)
+                        if (theGuiInterface.isRecording === false)
                         {
-                            isRecording = true
+                            theGuiInterface.isRecording = true
                             recordImage.source = "images/record-active.png"
                             flashingAnimattion.start()
                             return
                         }
                         else
                         {
-                            isRecording = false
+                            theGuiInterface.isRecording = false
                             recordImage.source = "images/record.png"
                             flashingAnimattion.stop()
                         }

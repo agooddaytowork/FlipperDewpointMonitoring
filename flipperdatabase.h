@@ -10,7 +10,6 @@
 class FlipperDatabase: public QObject
 {
     Q_OBJECT
-    bool running = false;
     QSqlDatabase m_database;
     QString m_databasePath;
     void createTablesIfNotExists();
@@ -25,6 +24,7 @@ class FlipperDatabase: public QObject
     void insertDewPointToDatabase(const int &CH, const double &value);
 public:
     FlipperDatabase(const QString &databasePath, QObject * parent = nullptr);
+    ~FlipperDatabase();
 
 
 public slots:

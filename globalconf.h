@@ -20,6 +20,11 @@ enum FlipperKeywords{
     updateChart,
     startRecording,
     stopRecording,
+    FlipperEnableChannelsChanged,
+    FlipperTCPAddressChanged,
+    FlipperTcpAddress,
+    FlipperTcpPort,
+    FlipperSVAddress,
     //////////////////////
     NumberOfSample
 };

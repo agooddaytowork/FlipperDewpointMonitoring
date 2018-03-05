@@ -333,7 +333,7 @@ Item
                     Repeater{
                         model: 6
                         Rectangle{
-
+                            enabled: !theGuiInterface.isRecording
                             width: 250
                             height: 200
                             color: "#ffffff"

@@ -4,6 +4,8 @@
 #include "globalconf.h"
 #include "QtCharts/QAbstractSeries"
 #include "QtCharts/QLineSeries"
+#include <QtCharts/QDateTimeAxis>
+#include <QDateTime>
 #include <QMap>
 
 QT_CHARTS_USE_NAMESPACE
@@ -33,7 +35,7 @@ public:
 
     /**** INTERNAL FUNCTIONS *****/
     Q_INVOKABLE double getlastgaugeValue( int const &CH) const;
-    Q_INVOKABLE void updateChartData(int const &CH, QAbstractSeries *serie);
+    Q_INVOKABLE void updateChartData(int const &CH, QAbstractSeries *serie, QAbstractAxis *axis);
     Q_INVOKABLE void resetChartDataHashPerCH(int const &CH);
     Q_INVOKABLE void resetChartDataHash();
 

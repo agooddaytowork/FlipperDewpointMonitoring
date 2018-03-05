@@ -119,7 +119,7 @@ Item {
         DateTimeAxis{
             id: axisX1
             tickCount: 6
-            min: new Date(new Date() - 100000)
+            min: new Date(new Date() - 10000000)
             max: new Date()
             format: "MMM\dd hh:mm"
         }
@@ -132,7 +132,7 @@ Item {
             useOpenGL: true
             width: 4
             color: "cyan"
-            style: Qt.DotLine
+            style: Qt.DashLine
 
         }
 
@@ -146,7 +146,9 @@ Item {
             onTriggered:
             {
                 console.log(schannel)
-                theGuiInterface.updateChartData(schannel, temperatureSerie)
+                theGuiInterface.updateChartData(schannel, temperatureSerie, axisX1)
+                console.log(temperatureSerie.at(0).x)
+
             }
         }
         // Timer to load graph the first time, only run one time
@@ -159,7 +161,9 @@ Item {
             triggeredOnStart: false
             onTriggered:
             {
-                theGuiInterface.updateChartData(schannel, temperatureSerie)
+                theGuiInterface.updateChartData(schannel, temperatureSerie, axisX1)
+
+
             }
         }
     }

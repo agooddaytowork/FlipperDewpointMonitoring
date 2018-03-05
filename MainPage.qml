@@ -190,6 +190,7 @@ Item {
             for(var i = 0; i < 6; i++)
             {
                 theGuiInterface.requestUpdateGauge(i)
+                theGuiInterface.requestUpdateChart(i,3000);
             }
         }
     }

@@ -140,7 +140,7 @@ void FlipperDatabase::processPackage(const QHash<int, QVariant> &data)
         else if (data.value(FlipperKeywords::GUI).toInt() == FlipperKeywords::updateChart) {
             // get multiple Dew Point of CHs
 #ifdef FlipperDatabaseDebug
-            qDebug() << "Flipper Database: updateChart()";
+             qDebug()<< "Flipper Database: requestUpdateChart() - CH = " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt());
 #endif
             getDewpointFromDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), 3000);
         }
@@ -162,7 +162,7 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
 #endif
     QSqlQuery aQuery;
 
-    int currentTime = QDateTime::currentMSecsSinceEpoch();
+    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
     aQuery.prepare("INSERT INTO " + FlipperChannelToString.value(CH) + " (timeStamp, data) VALUES (:time, :data) ");
     aQuery.bindValue(":time",currentTime );
     aQuery.bindValue(":data", value);
@@ -237,18 +237,22 @@ void FlipperDatabase::getDewpointFromDatabase(const int &CH, const int &samples)
 {
 #ifdef FlipperDatabaseDebug
     qDebug() << "Flipper Database: getDewpointFromDatabase()";
+    qDebug() << "CH: " + QString::number(CH);
 #endif
     QSqlQuery aQuery;
 
-    if( aQuery.exec("SELECT * FROM " + FlipperChannelToString.value(CH) + " ORDER BY timeStamp DESC LIMIT " + QString::number(samples) ))
+    if( aQuery.exec("SELECT * FROM " + FlipperChannelIntToString.value(CH) + " ORDER BY timeStamp ASC LIMIT " + QString::number(samples) ))
     {
         while(aQuery.next())
         {
             QHash<int, QVariant> package;
+#ifdef FlipperDatabaseDebug
+    qDebug() << "timeStamp: " + QString::number(aQuery.value("timeStamp").toULongLong()) + " data: " + QString::number(aQuery.value("data").toDouble());
 
+#endif
             package.insert(PackageKey, updateChart);
             package.insert(FlipperChannel, CH);
-            package.insert(updateGauge, QPointF(aQuery.value("timeStamp").toInt(),aQuery.value("data").toDouble()));
+            package.insert(updateChart, QPointF((quint64) aQuery.value("timeStamp").toULongLong(),aQuery.value("data").toDouble()));
             emit out(package);
         }
     }

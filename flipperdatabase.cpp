@@ -1,7 +1,7 @@
 #include "flipperdatabase.h"
 #include <QDateTime>
 
-#define FlipperDatabaseDebug (1)
+
 
 FlipperDatabase::~FlipperDatabase()
 {

@@ -2,6 +2,9 @@
 #define GLOBALCONF_H
 
 #include <QDebug>
+#define FlipperDatabaseDebug (0)
+#define FlipperInterfaceDebug (1)
+#define GuiInterfaceDebug (0)
 
 enum FlipperKeywords{
     PackageKey,

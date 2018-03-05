@@ -1,7 +1,7 @@
 #include "flipperinterface.h"
 #include <QDebug>
 
-#define FlipperInterfaceDebug (0)
+
 
 FlipperInterface::~FlipperInterface()
 {

@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
 
-
+    qRegisterMetaType<QHash<int,QVariant>>("GlobalPackage");
     qmlRegisterType<RadialBar>("CustomControls", 1, 0, "RadialBar");
     QQmlApplicationEngine engine;
 #ifdef Q_OS_WIN
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     backEndThread->start();
     QQmlContext *thisContext = engine.rootContext();
-    // expost FlipperSettings to QML
+    // expose FlipperSettings to QML
     thisContext->setContextProperty("theGuiInterface", &aGuiInterface);
     thisContext->setContextProperty("flipperSetting", &aFlipperSetting);
 

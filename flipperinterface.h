@@ -17,7 +17,7 @@ public:
     FlipperInterface(const QString &tcpAddr, const int &port, const int &flipperAddr, QObject * parent = 0);
     ~FlipperInterface();
     void setFlipperTcpSettings(const QString &tcpAddr, const int &port, const int &flipperAddr);
-    void stop();
+
     void setDecimalValue(const quint16 &channel, const quint16 &value);
     void setEnableChannels(const quint8 &value);
     void setCollectDataInterval(const int &interval);
@@ -30,9 +30,10 @@ public slots:
     void FlipperRespondHandler();
     void onStateChanged(int state);
     void start();
+    void stop();
 
 
-    void in(QHash<int,QVariant>); //Handle request from other modules
+    void in(QHash<int,QVariant> const &data); //Handle request from other modules
 
 private slots:
     void ModbusDeviceErrorHandler(QModbusDevice::Error error);
@@ -64,6 +65,7 @@ private:
     int m_TCPport;
     int m_FlipperAddress;
     int m_CollectDataInterVal;
+    bool m_isRunning;
     QModbusTcpClient *modbusDevice;
     QTimer *collectDataTimer;
     QList<QModbusDataUnit> m_requestList;

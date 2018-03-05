@@ -7,6 +7,7 @@ import CustomControls 1.0
 
 
 Item {
+    property  int  schannel
     ChartView{
         id: chartView
          anchors.fill: parent
@@ -135,29 +136,30 @@ Item {
 
         }
 
-        // Timer to load graph the first time, only run one time
         Timer
         {
-            id:loadGraphFirstTime
+            id:loadGraphFirstTimeTimer
             interval:0
             repeat: false
-            running:true
+            running: true
+            triggeredOnStart: true
             onTriggered:
             {
-
+                console.log(schannel)
+                theGuiInterface.updateChartData(schannel, temperatureSerie)
             }
         }
-
         // Timer to load graph the first time, only run one time
         Timer
         {
             id:loadGraphScheduleTimer
             interval:30000
-            repeat: false
-            running:true
+            repeat: true
+            running:theGuiInterface.isRecording
+            triggeredOnStart: false
             onTriggered:
             {
-
+                theGuiInterface.updateChartData(schannel, temperatureSerie)
             }
         }
     }

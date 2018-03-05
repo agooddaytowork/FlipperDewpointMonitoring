@@ -69,7 +69,7 @@ void FlipperDatabase::in(const QHash<int, QVariant> &input)
         qDebug() << "Flipper Database: first buffer";
 #endif
         m_RequestsBuffer_1.append(input);
-         doWork();
+        doWork();
     }
     else
     {
@@ -119,18 +119,30 @@ void FlipperDatabase::processPackage(const QHash<int, QVariant> &data)
     case FlipperKeywords::ModbusInterface:
 
 #ifdef FlipperDatabaseDebug
-    qDebug() << "Flipper Database: Channel: " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt()) ;
+        qDebug() << "Flipper Database: Channel: " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt()) ;
 #endif
         insertDewPointToDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(FlipperKeywords::Dewpoint).toDouble());
         break;
 
     case FlipperKeywords::GUI:
-        if(data.value(FlipperKeywords::Request).toInt() == FlipperKeywords::updateGauge)
+        if(data.value(FlipperKeywords::GUI).toInt() == FlipperKeywords::updateGauge)
         {
+
+#ifdef FlipperDatabaseDebug
+            qDebug() << "Flipper Database: updateGAUGE()";
+#endif
             //get Last Dew Point of CH
+
+            getLastDewPointFromDatabase(data.value(FlipperKeywords::FlipperChannel).toInt());
+
+
         }
-        else if (data.value(FlipperKeywords::Request).toInt() == FlipperKeywords::updateChart) {
+        else if (data.value(FlipperKeywords::GUI).toInt() == FlipperKeywords::updateChart) {
             // get multiple Dew Point of CHs
+#ifdef FlipperDatabaseDebug
+            qDebug() << "Flipper Database: updateChart()";
+#endif
+            getDewpointFromDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), 3000);
         }
         break;
 
@@ -161,21 +173,20 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
         qDebug() << "Flipper Database: insert succeed";
         qDebug() << "Flipper Database: Emitting out package";
 #endif
-
         QHash<int, QVariant> package;
 
         package.insert(PackageKey, updateGauge);
         package.insert(FlipperChannel, CH);
         package.insert(updateGauge, value);
 
-        out(package);
+        emit out(package);
 
         package.clear();
         package.insert(PackageKey, updateChart);
         package.insert(FlipperChannel, CH);
         package.insert(updateChart, QPointF(currentTime, value));
 
-        out(package);
+        emit out(package);
     }
     else
     {
@@ -184,4 +195,61 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
 #endif
     }
 
+}
+
+
+void FlipperDatabase::getLastDewPointFromDatabase(const int &CH)
+{
+
+#ifdef FlipperDatabaseDebug
+    qDebug() << "Flipper Database: getLastDewPointFromDatabase()";
+    qDebug() << "Channel: " + QString::number(CH);
+#endif
+    QSqlQuery aQuery;
+
+    if( aQuery.exec("SELECT * FROM " + FlipperChannelIntToString.value(CH) + " ORDER BY timeStamp DESC LIMIT 1" ))
+    {
+#ifdef FlipperDatabaseDebug
+        qDebug() << "Flipper Database: query succeed";
+#endif
+        while(aQuery.next())
+        {
+#ifdef FlipperDatabaseDebug
+            qDebug() << "Flipper Database: query data:" + aQuery.value("data").toString();
+#endif
+            QHash<int, QVariant> package;
+
+            package.insert(PackageKey, updateGauge);
+            package.insert(FlipperChannel, CH);
+            package.insert(updateGauge, aQuery.value("data").toDouble());
+            emit out(package);
+        }
+    }
+    else
+    {
+#ifdef FlipperDatabaseDebug
+        qDebug() << "Flipper Database: query FAILED";
+#endif
+    }
+}
+
+void FlipperDatabase::getDewpointFromDatabase(const int &CH, const int &samples)
+{
+#ifdef FlipperDatabaseDebug
+    qDebug() << "Flipper Database: getDewpointFromDatabase()";
+#endif
+    QSqlQuery aQuery;
+
+    if( aQuery.exec("SELECT * FROM " + FlipperChannelToString.value(CH) + " ORDER BY timeStamp DESC LIMIT " + QString::number(samples) ))
+    {
+        while(aQuery.next())
+        {
+            QHash<int, QVariant> package;
+
+            package.insert(PackageKey, updateChart);
+            package.insert(FlipperChannel, CH);
+            package.insert(updateGauge, QPointF(aQuery.value("timeStamp").toInt(),aQuery.value("data").toDouble()));
+            emit out(package);
+        }
+    }
 }

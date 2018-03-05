@@ -34,7 +34,7 @@ void GuiInterface::in(const QHash<int, QVariant> &data)
     switch (data.value(PackageKey).toInt()) {
     case updateGauge:
 
-        gaugeValueHash.insert(FlipperChannelToInt.value(data.value(FlipperChannel).toInt()), data.value(updateGauge).toDouble());
+        gaugeValueHash.insert(data.value(FlipperChannel).toInt(), data.value(updateGauge).toDouble());
 
         break;
     case updateChart:
@@ -88,6 +88,7 @@ void GuiInterface::resetChartDataHash()
 void GuiInterface::requestUpdateChart(const int &CH, const int &SampleNumber)
 {
     QHash<int,QVariant> data;
+    data.insert(FlipperKeywords::PackageKey, FlipperKeywords::GUI);
     data.insert(FlipperKeywords::GUI, FlipperKeywords::updateChart);
     data.insert(FlipperKeywords::FlipperChannel, CH);
     data.insert(FlipperKeywords::NumberOfSample, SampleNumber);
@@ -97,6 +98,7 @@ void GuiInterface::requestUpdateChart(const int &CH, const int &SampleNumber)
 void GuiInterface::requestUpdateGauge(const int &CH)
 {
     QHash<int,QVariant> data;
+     data.insert(FlipperKeywords::PackageKey, FlipperKeywords::GUI);
     data.insert(FlipperKeywords::GUI, FlipperKeywords::updateGauge);
     data.insert(FlipperKeywords::FlipperChannel, CH);
     emit toDatabase(data);
@@ -110,7 +112,7 @@ void GuiInterface::setFlipperEnableChannel(const int &channels)
     QHash<int, QVariant> package;
 
 
-    package.insert(PackageKey, GUI);
+    package.insert(PackageKey, FlipperEnableChannelsChanged);
     package.insert(FlipperEnableChannelsChanged, channels);
 
     emit toFlipperInterface(package);
@@ -121,7 +123,7 @@ void GuiInterface::setFLipperTCPAddress(const QString &tcpAddr, const int &port,
     QHash<int, QVariant> package;
 
 
-    package.insert(PackageKey, GUI);
+    package.insert(PackageKey, FlipperTCPAddressChanged);
     package.insert(FlipperTCPAddressChanged, 1);
     package.insert(FlipperTcpAddress, tcpAddr);
     package.insert(FlipperTcpPort, port);
@@ -133,15 +135,13 @@ void GuiInterface::setFLipperTCPAddress(const QString &tcpAddr, const int &port,
 void GuiInterface::startRecording()
 {
     QHash<int,QVariant> data;
-    data.insert(PackageKey, GUI);
-    data.insert(FlipperKeywords::startRecording, 1);
+    data.insert(PackageKey, FlipperKeywords::startRecording);
     emit toFlipperInterface(data);
 }
 
 void GuiInterface::stopRecording()
 {
     QHash<int,QVariant> data;
-    data.insert(PackageKey, GUI);
-    data.insert(FlipperKeywords::stopRecording, 1);
+    data.insert(PackageKey, FlipperKeywords::stopRecording);
     emit toFlipperInterface(data);
 }

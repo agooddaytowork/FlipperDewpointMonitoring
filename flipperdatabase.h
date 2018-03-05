@@ -22,6 +22,9 @@ class FlipperDatabase: public QObject
 
     // super small internal functions
     void insertDewPointToDatabase(const int &CH, const double &value);
+
+    void getLastDewPointFromDatabase(const int &CH);
+    void getDewpointFromDatabase(const int &CH, const int &samples);
 public:
     FlipperDatabase(const QString &databasePath, QObject * parent = nullptr);
     ~FlipperDatabase();

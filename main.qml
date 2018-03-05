@@ -118,19 +118,25 @@ ApplicationWindow {
                     anchors.margins: -10
                     onClicked:
                     {
-                        console.log(theGuiInterface.isRecording)
+
                         if (theGuiInterface.isRecording === false)
                         {
                             theGuiInterface.isRecording = true
                             recordImage.source = "images/record-active.png"
                             flashingAnimattion.start()
+                            theGuiInterface.setFlipperEnableChannel(flipperSetting.getChannelEnable())
+                            theGuiInterface.setFLipperTCPAddress(flipperSetting.getFlipperIp(), flipperSetting.getFlipperPort(), flipperSetting.getSVAddress())
+                            theGuiInterface.startRecording()
+
                             return
                         }
                         else
                         {
                             theGuiInterface.isRecording = false
+                            theGuiInterface.stopRecording()
                             recordImage.source = "images/record.png"
                             flashingAnimattion.stop()
+                            recordImage.opacity = 1;
                         }
                     }
                 }
@@ -271,5 +277,33 @@ ApplicationWindow {
         }
     }
 
+
+    Timer
+    {
+        id: checkAutoStartTimer
+        interval: 500
+        triggeredOnStart: true
+        repeat: false
+        running: true
+
+        onTriggered:
+        {
+
+            if(flipperSetting.isAutoStart())
+            {
+                if(!theGuiInterface.isRecording)
+                {
+                    theGuiInterface.isRecording = true
+                    recordImage.source = "images/record-active.png"
+                    flashingAnimattion.start()
+                    theGuiInterface.setFlipperEnableChannel(flipperSetting.getChannelEnable())
+                    theGuiInterface.setFLipperTCPAddress(flipperSetting.getFlipperIp(), flipperSetting.getFlipperPort(), flipperSetting.getSVAddress())
+                    theGuiInterface.startRecording()
+                }
+            }
+            // check AutoStart
+
+        }
+    }
 }
 

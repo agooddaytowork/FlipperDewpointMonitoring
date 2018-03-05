@@ -47,6 +47,15 @@ const QHash<int,QString> FlipperChannelToString{
     {Channel6, "CH6"}
 };
 
+const QHash<int,QString> FlipperChannelIntToString{
+    {0, "CH1"},
+    {1, "CH2"},
+    {2, "CH3"},
+    {3, "CH4"},
+    {4, "CH5"},
+    {5, "CH6"}
+};
+
 const QHash<int,int> FlipperChannelToInt{
     {Channel1, 0},
     {Channel2, 1},

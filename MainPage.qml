@@ -95,7 +95,8 @@ Item {
 
                 onClicked: {
                     console.log("Clicked")
-                    mainStackView.push(Qt.resolvedUrl("GaugePage.qml"))
+
+                    mainStackView.push(Qt.resolvedUrl("GaugePage.qml"), {schannel : chID})
                 }
             }
         }
@@ -106,36 +107,42 @@ Item {
         id: gaugeList
         ListElement{
             name: "CH1"
+            chID: 0
             theValue: -50
             theState: "enabled"
 
         }
         ListElement{
             name: "CH2"
+            chID: 1
             theValue: -70.2
             theState: "enabled"
 
         }
         ListElement{
             name: "CH3"
+            chID: 2
             theValue: -50.1
             theState: "disabled"
 
         }
         ListElement{
             name: "CH4"
+            chID: 3
             theValue: -50.1
             theState: "disabled"
 
         }
         ListElement{
             name: "CH5"
+            chID: 4
             theValue: -50.1
             theState: "disabled"
 
         }
         ListElement{
             name: "CH6"
+            chID: 5
             theValue: -50.1
             theState: "disabled"
 
@@ -155,16 +162,34 @@ Item {
 
             for(var i = 0; i < 6; i++)
             {
-                 // check gauge enable status
+                // check gauge enable status
                 if(flipperSetting.isthisChannelEnable(i+1))
                 {
                     gaugeList.get(i).theState = "enabled";
-                    gaugeList.get(i).theValue = theGuiInterface.getlastgaugeValue(i)
+
                 }
                 else
                 {
                     gaugeList.get(i).theState = "disabled"
                 }
+            }
+
+            // check AutoStart
+
+        }
+    }
+
+    Timer
+    {
+        id: initShitTimer
+        interval: 100
+        repeat: false
+        running: true
+        onTriggered:
+        {
+            for(var i = 0; i < 6; i++)
+            {
+                theGuiInterface.requestUpdateGauge(i)
             }
         }
     }
@@ -172,18 +197,21 @@ Item {
     Timer
     {
         id:  checkNewDataTimer
-        interval: 45000
+        interval: 20000
         triggeredOnStart: true
         repeat: true
-        running: false
-
+        running: theGuiInterface.isRecording
         onTriggered: {
             for(var i = 0; i < 6; i++)
             {
-                 // get new Data if gauge enable
-                if(flipperSetting.isthisChannelEnable(i+1))
+                if(theGuiInterface.isRecording)
                 {
+                    // get new Data if gauge enable
+                    if(flipperSetting.isthisChannelEnable(i+1))
+                    {
 
+                        gaugeList.get(i).theValue = theGuiInterface.getlastgaugeValue(i)
+                    }
                 }
 
             }

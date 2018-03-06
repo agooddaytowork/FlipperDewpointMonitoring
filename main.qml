@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import QtCharts 2.1
 import QtQuick.Dialogs 1.1
 import QtQuick.Controls.Material 2.1
-
+import MouseEventSpy 1.0
 
 ApplicationWindow {
     id: stationPage
@@ -12,6 +12,17 @@ ApplicationWindow {
     width: 800
     height: 480
     title: qsTr("Flipper DewPoint Monitoring")
+
+    Connections
+    {
+        target: MouseEventSpy
+        onMouseEventDetected:
+        {
+            lockScreenTimer.restart()
+            console.log("event detected")
+        }
+
+    }
 
     header: ToolBar{
         id:theToolBar
@@ -34,6 +45,7 @@ ApplicationWindow {
             else
                 0
         }
+
 
         Rectangle {
             color: "transparent"
@@ -305,5 +317,20 @@ ApplicationWindow {
 
         }
     }
+
+    Timer
+    {
+        id: lockScreenTimer
+        interval: 10000
+        triggeredOnStart: false
+        repeat: true
+        running: true
+        onTriggered:
+        {
+            mainStackView.push(Qt.resolvedUrl("LogInPage.qml"))
+        }
+    }
+
+
 }
 

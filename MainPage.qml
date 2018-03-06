@@ -14,7 +14,7 @@ Item {
         id: gaugeGridView
         anchors.fill: parent
         model: gaugeList
-        cellHeight: (parent.height) /2
+        cellHeight: parent.height
         cellWidth: parent.width /3
         delegate: Rectangle{
             width: gaugeGridView.cellWidth
@@ -37,9 +37,9 @@ Item {
             RadialBar{
                 id: pressureGauge
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
+                anchors.verticalCenter: parent.verticalCenter
                 width: parent.width / 1.4
-                height: width
+                height: parent.height
                 penStyle: Qt.RoundCap
                 progressColor: "#333333"
                 foregroundColor: "#333333"
@@ -126,27 +126,6 @@ Item {
             theState: "disabled"
 
         }
-        ListElement{
-            name: "CH4"
-            chID: 3
-            theValue: -50.1
-            theState: "disabled"
-
-        }
-        ListElement{
-            name: "CH5"
-            chID: 4
-            theValue: -50.1
-            theState: "disabled"
-
-        }
-        ListElement{
-            name: "CH6"
-            chID: 5
-            theValue: -50.1
-            theState: "disabled"
-
-        }
     }
 
     Timer
@@ -160,7 +139,7 @@ Item {
         onTriggered:
         {
 
-            for(var i = 0; i < 6; i++)
+            for(var i = 0; i < 3; i++)
             {
                 // check gauge enable status
                 if(flipperSetting.isthisChannelEnable(i+1))
@@ -187,7 +166,7 @@ Item {
         running: true
         onTriggered:
         {
-            for(var i = 0; i < 6; i++)
+            for(var i = 0; i < 3; i++)
             {
                 theGuiInterface.requestUpdateGauge(i)
                 theGuiInterface.requestUpdateChart(i,3000);
@@ -203,7 +182,7 @@ Item {
         repeat: true
         running: theGuiInterface.isRecording
         onTriggered: {
-            for(var i = 0; i < 6; i++)
+            for(var i = 0; i < 3; i++)
             {
                 if(theGuiInterface.isRecording)
                 {

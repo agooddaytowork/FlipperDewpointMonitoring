@@ -25,6 +25,54 @@ Item
                 id: column
                 anchors.fill: parent
                 spacing: 10
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: 140
+                    radius: 10
+                    color: "#ffffff"
+                    border.color: "black"
+                    border.width: 2
+                    RowLayout{
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 10
+
+                        Button
+                        {
+                            id: exitButton
+                            text: "Exit Application"
+                            onClicked:
+                            {
+                                Qt.quit()
+                            }
+                        }
+
+                        Button
+                        {
+                            id: changePWButton
+                            text: "Change Password"
+
+                            onClicked:
+                            {
+
+                            }
+                        }
+
+                        CheckBox
+                        {
+                            id: autoStartCheckbox
+                            text: "AutoStart"
+                            checked:  flipperSetting.isAutoStart()
+                            onCheckedChanged: {
+                                flipperSetting.updateFlipperSetting("autoStart", autoStartCheckbox.checked)
+                            }
+                        }
+                    }
+
+                }
+
                 Rectangle
                 {
                     width: parent.width
@@ -175,15 +223,7 @@ Item
                                 }
                             }
 
-                            CheckBox
-                            {
-                                id: autoStartCheckbox
-                                text: "AutoStart"
-                                checked:  flipperSetting.isAutoStart()
-                                onCheckedChanged: {
-                                    flipperSetting.updateFlipperSetting("autoStart", autoStartCheckbox.checked)
-                                }
-                            }
+
                         }
 
 

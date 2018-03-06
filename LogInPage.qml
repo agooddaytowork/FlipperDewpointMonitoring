@@ -131,27 +131,6 @@ Item {
         }
 
 
-
-
-
-//        Rectangle
-//        {
-//            width: 300
-//            height: 86
-//            anchors.bottom: parent.bottom
-//            anchors.right: parent.right
-//            anchors.bottomMargin: 100
-//            anchors.rightMargin: 200
-
-//            Image {
-//                id: logo
-//                source: "../images/Kla-logo-purplepng.png"
-//                anchors.fill: parent
-//                fillMode: Image.Stretch
-//            }
-
-//        }
-
     }
     InputPanel {
         id: inputPanel

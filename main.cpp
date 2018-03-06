@@ -11,6 +11,7 @@
 #include "flipperdatabase.h"
 #include "flipperinterface.h"
 #include "guiinterface.h"
+#include "mouseeventspy.h"
 
 
 int main(int argc, char *argv[])
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<QHash<int,QVariant>>("GlobalPackage");
     qmlRegisterType<RadialBar>("CustomControls", 1, 0, "RadialBar");
+    qmlRegisterSingletonType<MouseEventSpy>("MouseEventSpy", 1, 0, "MouseEventSpy", MouseEventSpy::singletonProvider);
     QQmlApplicationEngine engine;
 #ifdef Q_OS_WIN
     QString extraImportPath(QStringLiteral("%1/../../../../%2"));
@@ -57,14 +59,11 @@ int main(int argc, char *argv[])
     QObject::connect(&aGuiInterface,SIGNAL(toFlipperInterface(QHash<int,QVariant>)),&aFlipperInterface,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aFlipperInterface, SIGNAL(out(QHash<int,QVariant>)), &myDatabase, SLOT(in(QHash<int,QVariant>)));
 
-
     backEndThread->start();
     QQmlContext *thisContext = engine.rootContext();
     // expose FlipperSettings to QML
     thisContext->setContextProperty("theGuiInterface", &aGuiInterface);
     thisContext->setContextProperty("flipperSetting", &aFlipperSetting);
-
-
 
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

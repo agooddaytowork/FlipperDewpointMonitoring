@@ -36,6 +36,7 @@ void FlipperSetting::loadSettingFromFile()
     if(!m_setting.contains("NotificationMailAddress")) m_setting.setValue("NotificationMailAddress", "tam.duong@kla-tencor.com");
     if(!m_setting.contains("NotificationMailPassword")) m_setting.setValue("NotificationMailPassword", "default");
     if(!m_setting.contains("autoStart")) m_setting.setValue("autoStart", "false");
+    if(!m_setting.contains("lockScreenPassword")) m_setting.value("lockScreenPassword", "1234");
 }
 
 int FlipperSetting::getid() const{
@@ -405,4 +406,11 @@ void FlipperSetting::setDecimailPoint(const int &CH, const int &value)
         break;
     }
 
+}
+
+
+QString FlipperSetting::getLockScreenPassword() const
+{
+    QSettings m_setting(m_settingPath, QSettings::IniFormat);
+    return m_setting.value("lockScreenPassword").toString();
 }

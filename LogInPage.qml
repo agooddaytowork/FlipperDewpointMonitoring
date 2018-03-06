@@ -9,12 +9,6 @@ Item {
 
     id: loginPage
     objectName: "loginPage"
-    Settings
-    {
-        id: setting
-        category: "logInPage"
-        property string screenPassword: "159753"
-    }
 
     Rectangle
     {
@@ -89,7 +83,7 @@ Item {
                         wrongPasswordText.visible = false
                     }
 
-                    if(passwordField.text == setting.screenPassword && passwordField.text.length <= setting.screenPassword.length  )
+                    if(passwordField.text === flipperSetting.getLockScreenPassword() )
                     {
                         passwordField.text = ""
                         passwordField.focus = false
@@ -105,7 +99,7 @@ Item {
                     }
                     else
                     {
-                        if( passwordField.text.length === setting.screenPassword.length )
+                        if( passwordField.text.length === flipperSetting.getLockScreenPassword().length )
                         {
                             shakeWhenWrongPassWord.running = true
                             passwordField.text = ""

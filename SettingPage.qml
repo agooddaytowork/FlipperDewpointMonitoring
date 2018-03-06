@@ -1,8 +1,9 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import CustomControls 1.0
 import QtQuick.VirtualKeyboard 2.1
+import QtQuick.Window 2.2
 
 
 Item
@@ -56,6 +57,97 @@ Item
 
                             onClicked:
                             {
+                                changePasswordDialog.open()
+                            }
+
+                            Dialog{
+                                id: changePasswordDialog
+                                x: (flickable.width - changePasswordDialog.width) /2
+                                y:(flickable.height - changePasswordDialog.height) /2 -100
+                                parent: ApplicationWindow.overlay
+                                modal: true
+
+                                Column
+                                {
+                                    spacing: 20
+                                    anchors.fill: parent
+
+                                    TextField
+                                    {
+                                        id: currentPasswordTextField
+                                        echoMode:  TextInput.Password
+                                        inputMethodHints:  Qt.ImhDigitsOnly
+                                        placeholderText: "Enter Current Password"
+                                    }
+
+                                    Row
+                                    {
+                                        spacing: 20
+
+                                        TextField{
+                                            id: newPasswordTextField
+                                            echoMode: TextInput.Password
+                                            inputMethodHints:  Qt.ImhDigitsOnly
+                                            placeholderText: "Enter New password"
+
+
+                                        }
+
+                                        TextField{
+                                            id: confirmNewPassWordTextField
+                                            echoMode: TextInput.Password
+                                            inputMethodHints:  Qt.ImhDigitsOnly
+                                            placeholderText: "ConfirmNewPassword"
+                                        }
+                                        Button
+                                        {
+                                            id: ackChangePasswordButton
+                                            text: "OK"
+
+                                            onClicked:
+                                            {
+                                                if(!currentPasswordTextField.text || !newPasswordTextField.text || !confirmNewPassWordTextField.text)
+                                                {
+                                                    changePasswordDialogStatusLabel.text = "Status: Please enter data to all fields"
+                                                }
+                                                else
+                                                {
+                                                    if(currentPasswordTextField.text !== flipperSetting.getLockScreenPassword())
+                                                    {
+                                                        changePasswordDialogStatusLabel.text = "Status: Current Password is not correct"
+                                                    }
+                                                    else
+                                                    {
+                                                        if(newPasswordTextField.text == confirmNewPassWordTextField.text)
+                                                        {
+                                                            // do something here
+
+                                                            flipperSetting.updateFlipperSetting("lockScreenPassword", newPasswordTextField.text)
+
+                                                            newPasswordTextField.text = ""
+                                                            confirmNewPassWordTextField.text = ""
+                                                            currentPasswordTextField = ""
+                                                            changePasswordDialogStatusLabel.text = "Status: LockScreen Password is changed, touch anywhere outsite the dialog to return"
+
+                                                        }
+                                                        else
+                                                        {
+                                                            changePasswordDialogStatusLabel.text = "Status: Passwords do not match, please enter again"
+                                                        }
+                                                    }
+                                                }
+
+
+                                            }
+                                        }
+
+                                    }
+                                    Label
+                                    {   id: changePasswordDialogStatusLabel
+                                        text: "Status"
+                                    }
+                                }
+
 
                             }
                         }
@@ -500,6 +592,8 @@ Item
     }
     InputPanel {
         id: inputPanel
+        parent: ApplicationWindow.overlay
+        z: 1
         y: Qt.inputMethod.visible ? (parent.height - inputPanel.height ) : parent.height
         anchors.left: parent.left
         anchors.right: parent.right

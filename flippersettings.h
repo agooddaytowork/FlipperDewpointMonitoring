@@ -44,6 +44,7 @@ public:
     Q_INVOKABLE  int getDecimalPoint(int const &CH) const;
     Q_INVOKABLE void setDecimailPoint(int const &CH, int const &value);
     Q_INVOKABLE double getChannelOOSpec(int const &CH) const;
+    Q_INVOKABLE QString getLockScreenPassword() const;
     Q_INVOKABLE void updateOOSpec(int const &CH, double const &value);
     Q_INVOKABLE void updateFlipperSetting(QString const &key, QVariant const &value);
 

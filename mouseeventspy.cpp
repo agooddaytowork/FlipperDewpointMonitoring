@@ -40,7 +40,9 @@ bool MouseEventSpy::eventFilter(QObject* watched, QEvent* event)
     if ((t == QEvent::MouseButtonDblClick
          || t == QEvent::MouseButtonPress
          || t == QEvent::MouseButtonRelease
-         || t == QEvent::MouseMove)
+         || t == QEvent::MouseMove
+         || t == QEvent::TouchBegin
+         || t == QEvent::TouchEnd)
             && event->spontaneous() // Take only mouse events from outside of Qt
             )
         emit mouseEventDetected();

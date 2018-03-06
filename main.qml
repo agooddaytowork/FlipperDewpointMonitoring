@@ -19,7 +19,7 @@ ApplicationWindow {
         onMouseEventDetected:
         {
             lockScreenTimer.restart()
-            console.log("event detected")
+//            console.log("event detected")
         }
 
     }

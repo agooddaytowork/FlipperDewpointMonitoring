@@ -321,13 +321,16 @@ ApplicationWindow {
     Timer
     {
         id: lockScreenTimer
-        interval: 10000
+        interval: 300000
         triggeredOnStart: false
         repeat: true
         running: true
         onTriggered:
         {
-            mainStackView.push(Qt.resolvedUrl("LogInPage.qml"))
+            if(mainStackView.currentItem.objectName != "loginPage")
+            {
+                mainStackView.push(Qt.resolvedUrl("LogInPage.qml"))
+            }
         }
     }
 

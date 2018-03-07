@@ -8,6 +8,7 @@ import QtQuick.Window 2.2
 
 Item
 {
+
     objectName: "SettingPage"
     Flickable
     {
@@ -92,10 +93,12 @@ Item
                             Dialog{
                                 id: changePasswordDialog
                                 x: (flickable.width - changePasswordDialog.width) /2
-                                y:(flickable.height - changePasswordDialog.height) /2 -100
-                                parent: ApplicationWindow.overlay
-                                modal: true
-
+                                y:(flickable.height - changePasswordDialog.height) /2 -200
+                                z:1
+                                height: 240
+                                parent: flickable
+                                modal: false
+                                closePolicy: Dialog.CloseOnEscape
                                 Column
                                 {
                                     spacing: 20
@@ -128,6 +131,14 @@ Item
                                             inputMethodHints:  Qt.ImhDigitsOnly
                                             placeholderText: "ConfirmNewPassword"
                                         }
+
+
+                                    }
+
+                                    Row
+                                    {
+                                        spacing: 20
+
                                         Button
                                         {
                                             id: ackChangePasswordButton
@@ -156,7 +167,7 @@ Item
                                                             newPasswordTextField.text = ""
                                                             confirmNewPassWordTextField.text = ""
                                                             currentPasswordTextField.text = ""
-                                                            changePasswordDialogStatusLabel.text = "Status: LockScreen Password is changed, touch anywhere outsite the dialog to return"
+                                                            changePasswordDialogStatusLabel.text = "Status: LockScreen Password is changed, Click Close return"
 
                                                         }
                                                         else
@@ -169,8 +180,18 @@ Item
 
                                             }
                                         }
-
+                                        Button
+                                        {
+                                            id: closeChangePassWordDialogButton
+                                            text: "Close"
+                                            onClicked:
+                                            {
+                                                changePasswordDialog.close()
+                                            }
+                                        }
                                     }
+
+
                                     Label
                                     {   id: changePasswordDialogStatusLabel
                                         text: "Status"
@@ -610,7 +631,7 @@ Item
     InputPanel {
         id: inputPanel
         parent: ApplicationWindow.overlay
-        z: 1
+        z: 2
         y: Qt.inputMethod.visible ? (parent.height - inputPanel.height ) : parent.height
         anchors.left: parent.left
         anchors.right: parent.right

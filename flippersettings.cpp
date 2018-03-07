@@ -36,7 +36,7 @@ void FlipperSetting::loadSettingFromFile()
     if(!m_setting.contains("NotificationMailAddress")) m_setting.setValue("NotificationMailAddress", "tam.duong@kla-tencor.com");
     if(!m_setting.contains("NotificationMailPassword")) m_setting.setValue("NotificationMailPassword", "default");
     if(!m_setting.contains("autoStart")) m_setting.setValue("autoStart", "false");
-    if(!m_setting.contains("lockScreenPassword")) m_setting.value("lockScreenPassword", "1234");
+    if(!m_setting.contains("lockScreenPassword")) m_setting.setValue("lockScreenPassword", "1234");
 
 }
 

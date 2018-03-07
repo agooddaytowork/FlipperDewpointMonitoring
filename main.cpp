@@ -20,7 +20,9 @@ QString getEth0MACAddressFromSystem(QString const &scriptPath)
 
     exec.start(scriptPath);
     exec.waitForFinished();
-    return QString(exec.readAllStandardOutput());
+    QString output = exec.readAllStandardOutput();
+    qDebug() << output;
+    return output;
 }
 
 
@@ -49,7 +51,8 @@ int main(int argc, char *argv[])
     FlipperSetting aFlipperSetting(QCoreApplication::applicationDirPath()+"/flipperMonitoring.ini");
 
 #if (defined (LINUX) || defined (__linux__))
-    aFlipperSetting.setEth0MacAddress(getEth0MACAddressFromSystem("/home/pi/InitScripts./getEth0MacAddress.sh"));
+    qDebug() << "LINUX STUFFFF";
+    aFlipperSetting.setEth0MacAddress(getEth0MACAddressFromSystem("/home/pi/InitScripts/getEth0MacAddress.sh"));
 #endif
 
     FlipperInterface aFlipperInterface(aFlipperSetting.getFlipperIp(), aFlipperSetting.getFlipperPort(), aFlipperSetting.getSVAddress());

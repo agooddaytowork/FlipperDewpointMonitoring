@@ -14,6 +14,16 @@
 #include "mouseeventspy.h"
 
 
+QString getEth0MACAddressFromSystem(QString const &scriptPath)
+{
+    QProcess exec;
+
+    exec.start(scriptPath);
+    exec.waitForFinished();
+    return QString(exec.readAllStandardOutput());
+}
+
+
 int main(int argc, char *argv[])
 {
 
@@ -37,6 +47,10 @@ int main(int argc, char *argv[])
 
     // Initiailizing all modules
     FlipperSetting aFlipperSetting(QCoreApplication::applicationDirPath()+"/flipperMonitoring.ini");
+
+#if (defined (LINUX) || defined (__linux__))
+    aFlipperSetting.setEth0MacAddress(getEth0MACAddressFromSystem("/home/pi/InitScripts./getEth0MacAddress.sh"));
+#endif
 
     FlipperInterface aFlipperInterface(aFlipperSetting.getFlipperIp(), aFlipperSetting.getFlipperPort(), aFlipperSetting.getSVAddress());
     aFlipperInterface.setEnableChannels(aFlipperSetting.getChannelEnable());

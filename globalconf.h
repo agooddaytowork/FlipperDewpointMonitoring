@@ -5,6 +5,7 @@
 #define FlipperDatabaseDebug (0)
 #define FlipperInterfaceDebug (1)
 #define GuiInterfaceDebug (0)
+#include <QProcess>
 
 enum FlipperKeywords{
     PackageKey,
@@ -67,5 +68,6 @@ const QHash<int,int> FlipperChannelToInt{
     {Channel5, 4},
     {Channel6, 5}
 };
+
 
 #endif // GLOBALCONF_H

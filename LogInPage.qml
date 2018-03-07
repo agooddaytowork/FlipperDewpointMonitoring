@@ -95,7 +95,6 @@ Item {
                         {
                             mainStackView.pop()
                         }
-
                     }
                     else
                     {
@@ -123,9 +122,8 @@ Item {
                 visible: false
             }
         }
-
-
     }
+
     InputPanel {
         id: inputPanel
         y: Qt.inputMethod.visible ? (parent.height - inputPanel.height) : parent.height

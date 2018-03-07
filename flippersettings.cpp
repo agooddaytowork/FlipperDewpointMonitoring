@@ -1,7 +1,7 @@
 #include "flippersettings.h"
 #include <QCoreApplication>
 
-FlipperSetting::FlipperSetting(const QString &settingPath, QObject *parent): m_settingPath(settingPath), QObject(parent)
+FlipperSetting::FlipperSetting(const QString &settingPath, QObject *parent):  QObject(parent), m_settingPath(settingPath)
 {
     loadSettingFromFile();
 }
@@ -37,6 +37,7 @@ void FlipperSetting::loadSettingFromFile()
     if(!m_setting.contains("NotificationMailPassword")) m_setting.setValue("NotificationMailPassword", "default");
     if(!m_setting.contains("autoStart")) m_setting.setValue("autoStart", "false");
     if(!m_setting.contains("lockScreenPassword")) m_setting.value("lockScreenPassword", "1234");
+
 }
 
 int FlipperSetting::getid() const{
@@ -414,3 +415,17 @@ QString FlipperSetting::getLockScreenPassword() const
     QSettings m_setting(m_settingPath, QSettings::IniFormat);
     return m_setting.value("lockScreenPassword").toString();
 }
+
+QString FlipperSetting::getEth0MacAddress()
+{
+    QSettings m_setting(m_settingPath, QSettings::IniFormat);
+    return m_setting.value("eth0MacAddress").toString();
+}
+
+
+void FlipperSetting::setEth0MacAddress(const QString &Mac)
+{
+    QSettings m_setting(m_settingPath, QSettings::IniFormat);
+    m_setting.setValue("eth0MacAddress", Mac);
+}
+

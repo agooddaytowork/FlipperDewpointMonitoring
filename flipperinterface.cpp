@@ -80,7 +80,7 @@ void FlipperInterface::FlipperRespondHandler()
 
     if (reply->error() == QModbusDevice::NoError) {
         const QModbusDataUnit unit = reply->result();
-        double value;
+        double value =0;
         if(unit.valueCount() != 0)
         {
             value = ((double)((qint16)unit.value(0)) / (double) m_channelsDecimalPointsHash.value(relativeCHaddressToChannelEnum.value(unit.startAddress())));

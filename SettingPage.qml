@@ -20,7 +20,7 @@ Item
         Pane{
             id: pane
             width: flickable.width
-            height: flickable.height*2.3
+            height: flickable.height*2.7
 
             Column{
                 id: column
@@ -30,24 +30,53 @@ Item
                 Rectangle
                 {
                     width: parent.width
-                    height: 140
+                    height: 180
                     radius: 10
                     color: "#ffffff"
                     border.color: "black"
                     border.width: 2
-                    RowLayout{
+
+                    GridLayout
+                    {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        spacing: 10
+                        rows:3
+                        columns: 2
+                        columnSpacing: 10
+                        rowSpacing: 10
 
-                        Button
+                        Text {
+
+                            text: qsTr("Depot Name:")
+                        }
+
+                        TextField
                         {
-                            id: exitButton
-                            text: "Exit Application"
-                            onClicked:
-                            {
-                                Qt.quit()
+                            id:  depotNameTextField
+                            text: flipperSetting.getDepotName();
+
+                            onActiveFocusChanged: {
+                                if(activeFocus)
+                                {
+                                    var posWithinFlickable = mapToItem(column, 0, height / 2);
+                                    flickable.contentY = (posWithinFlickable.y - flickable.height / 2) +100;
+                                }
                             }
+
+                            onTextChanged:
+                            {
+                                flipperSetting.updateFlipperSetting("DeviceName", depotNameTextField.text)
+                            }
+                        }
+
+
+                        Text {
+
+                            text: qsTr("Device MAC: ")
+                        }
+                        Text {
+                            id: macAddressText
+                            text: flipperSetting.getEth0MacAddress()
                         }
 
                         Button
@@ -126,7 +155,7 @@ Item
 
                                                             newPasswordTextField.text = ""
                                                             confirmNewPassWordTextField.text = ""
-                                                            currentPasswordTextField = ""
+                                                            currentPasswordTextField.text = ""
                                                             changePasswordDialogStatusLabel.text = "Status: LockScreen Password is changed, touch anywhere outsite the dialog to return"
 
                                                         }
@@ -151,7 +180,6 @@ Item
 
                             }
                         }
-
                         CheckBox
                         {
                             id: autoStartCheckbox
@@ -161,8 +189,19 @@ Item
                                 flipperSetting.updateFlipperSetting("autoStart", autoStartCheckbox.checked)
                             }
                         }
-                    }
+                        Button
+                        {
+                            id: exitButton
+                            text: "Exit Application"
+                            onClicked:
+                            {
+                                Qt.quit()
+                            }
+                        }
 
+
+
+                    }
                 }
 
                 Rectangle
@@ -184,29 +223,7 @@ Item
                         columnSpacing: 10
                         rowSpacing: 10
 
-                        Text {
 
-                            text: qsTr("Depot Name:")
-                        }
-
-                        TextField
-                        {
-                            id:  depotNameTextField
-                            text: flipperSetting.getDepotName();
-
-                            onActiveFocusChanged: {
-                                if(activeFocus)
-                                {
-                                    var posWithinFlickable = mapToItem(column, 0, height / 2);
-                                    flickable.contentY = (posWithinFlickable.y - flickable.height / 2) +100;
-                                }
-                            }
-
-                            onTextChanged:
-                            {
-                                flipperSetting.updateFlipperSetting("DeviceName", depotNameTextField.text)
-                            }
-                        }
                         Text {
 
                             text: qsTr("Flipper Address:")

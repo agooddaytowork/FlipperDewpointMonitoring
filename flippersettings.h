@@ -48,6 +48,10 @@ public:
     Q_INVOKABLE void updateOOSpec(int const &CH, double const &value);
     Q_INVOKABLE void updateFlipperSetting(QString const &key, QVariant const &value);
 
+     Q_INVOKABLE QString getEth0MacAddress();
+     void setEth0MacAddress(const QString &Mac);
+
+
 };
 
 #endif // FLIPPERSETTING_H

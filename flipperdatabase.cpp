@@ -8,7 +8,7 @@ FlipperDatabase::~FlipperDatabase()
 
 }
 
-FlipperDatabase::FlipperDatabase(const QString &databasePath, QObject *parent): m_databasePath(databasePath), QObject(parent)
+FlipperDatabase::FlipperDatabase(const QString &databasePath, QObject *parent): QObject(parent), m_databasePath(databasePath)
 {
 
 #if FlipperDatabaseDebug

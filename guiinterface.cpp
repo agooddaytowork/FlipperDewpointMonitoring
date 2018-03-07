@@ -2,7 +2,7 @@
 
 #define GuiInterfaceDebug (0)
 /**** INTERNAL FUNCTIONS *****/
-GuiInterface::GuiInterface(QObject *parent): m_isRecording(false),QObject(parent)
+GuiInterface::GuiInterface(QObject *parent): QObject(parent),m_isRecording(false)
 {
 
 #if GuiInterfaceDebug

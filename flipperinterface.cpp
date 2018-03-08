@@ -91,11 +91,12 @@ void FlipperInterface::FlipperRespondHandler()
         qDebug() << "value to Double: " + QString::number(value);
 #endif
 
-        // create package to emit OUTF
+        // create package to emit OUT
         QHash<int, QVariant> package;
         package.insert(FlipperKeywords::PackageKey, FlipperKeywords::ModbusInterface);
         package.insert(FlipperKeywords::FlipperChannel, relativeCHaddressToChannelEnum.value(unit.startAddress()));
         package.insert(FlipperKeywords::Dewpoint, value);
+        package.insert(FlipperKeywords::SampleTimePoint, (quint64) QDateTime::currentMSecsSinceEpoch());
 
         emit out(package);
 

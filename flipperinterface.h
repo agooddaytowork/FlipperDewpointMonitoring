@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QHash>
 #include <QVariant>
+#include <QDateTime>
 #include "globalconf.h"
 
 class FlipperInterface: public QObject

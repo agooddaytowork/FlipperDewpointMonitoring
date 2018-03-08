@@ -21,7 +21,7 @@ class FlipperDatabase: public QObject
     void processPackage(const QHash<int,QVariant> &data);
 
     // super small internal functions
-    void insertDewPointToDatabase(const int &CH, const double &value);
+    void insertDewPointToDatabase(const int &CH, const double &value, const quint64 timePoint);
 
     void getLastDewPointFromDatabase(const int &CH);
     void getDewpointFromDatabase(const int &CH, const int &samples);

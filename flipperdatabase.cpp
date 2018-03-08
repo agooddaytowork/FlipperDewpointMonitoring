@@ -121,7 +121,7 @@ void FlipperDatabase::processPackage(const QHash<int, QVariant> &data)
 #if FlipperDatabaseDebug
         qDebug() << "Flipper Database: Channel: " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt()) ;
 #endif
-        insertDewPointToDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(FlipperKeywords::Dewpoint).toDouble());
+        insertDewPointToDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(FlipperKeywords::Dewpoint).toDouble(), data.value(FlipperKeywords::SampleTimePoint).toULongLong());
         break;
 
     case FlipperKeywords::GUI:
@@ -154,7 +154,7 @@ void FlipperDatabase::processPackage(const QHash<int, QVariant> &data)
     }
 }
 
-void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &value)
+void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &value, const quint64 timePoint)
 {
 #if FlipperDatabaseDebug
     qDebug() << "Flipper Database: insertDewPointToDatabase()";
@@ -162,9 +162,8 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
 #endif
     QSqlQuery aQuery;
 
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
     aQuery.prepare("INSERT INTO " + FlipperChannelToString.value(CH) + " (timeStamp, data) VALUES (:time, :data) ");
-    aQuery.bindValue(":time",currentTime );
+    aQuery.bindValue(":time",timePoint );
     aQuery.bindValue(":data", value);
 
     if(aQuery.exec())
@@ -184,7 +183,7 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
         package.clear();
         package.insert(PackageKey, updateChart);
         package.insert(FlipperChannel, CH);
-        package.insert(updateChart, QPointF(currentTime, value));
+        package.insert(updateChart, QPointF(timePoint, value));
 
         emit out(package);
     }

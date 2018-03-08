@@ -5,6 +5,7 @@
 #define FlipperDatabaseDebug (0)
 #define FlipperInterfaceDebug (1)
 #define GuiInterfaceDebug (0)
+#define FlipperNotificationDebug (1)
 #include <QProcess>
 
 enum FlipperKeywords{
@@ -17,7 +18,7 @@ enum FlipperKeywords{
     // For Flipper Interface
     FlipperChannel,
     Dewpoint,
-
+    SampleTimePoint,
     // For Gui
     Request,
     updateGauge,
@@ -31,6 +32,8 @@ enum FlipperKeywords{
     FlipperSVAddress,
     //////////////////////
     NumberOfSample
+
+
 };
 
 enum ChannelEnableEnum{

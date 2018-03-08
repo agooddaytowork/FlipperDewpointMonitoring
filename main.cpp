@@ -18,9 +18,18 @@ QString getEth0MACAddressFromSystem(QString const &scriptPath)
 {
     QProcess exec;
 
-    exec.start(scriptPath);
+    QStringList argo,list;
+
+    argo <<scriptPath;
+
+    list <<"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:";
+
+    exec.setEnvironment(list);
+    exec.setProcessChannelMode(QProcess::MergedChannels );
+    exec.start("/bin/sh", argo);
     exec.waitForFinished();
-    QString output = exec.readAllStandardOutput();
+    QString output = exec.readLine();
+    output = output.simplified();
     qDebug() << output;
     return output;
 }

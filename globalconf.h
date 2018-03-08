@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #define FlipperDatabaseDebug (0)
-#define FlipperInterfaceDebug (1)
+#define FlipperInterfaceDebug (0)
 #define GuiInterfaceDebug (0)
 #define FlipperNotificationDebug (1)
 #include <QProcess>
@@ -31,7 +31,11 @@ enum FlipperKeywords{
     FlipperTcpPort,
     FlipperSVAddress,
     //////////////////////
-    NumberOfSample
+    NumberOfSample,
+
+    // NotificationModule
+    LastSampleTimePoint,
+    getNotSyncedData
 
 
 };

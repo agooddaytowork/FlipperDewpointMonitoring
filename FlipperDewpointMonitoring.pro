@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     flippersettingmodel.cpp \
     flipperdatabase.cpp \
     guiinterface.cpp \
-    mouseeventspy.cpp
+    mouseeventspy.cpp \
+    flippernotification.cpp
 
 RESOURCES += qml.qrc
 
@@ -49,6 +50,7 @@ HEADERS += \
     globalconf.h \
     flipperdatabase.h \
     guiinterface.h \
-    mouseeventspy.h
+    mouseeventspy.h \
+    flippernotification.h
 
 DISTFILES +=

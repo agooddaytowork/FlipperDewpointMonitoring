@@ -10,6 +10,7 @@
 #include "globalconf.h"
 #include "flipperdatabase.h"
 #include "flipperinterface.h"
+#include "flippernotification.h"
 #include "guiinterface.h"
 #include "mouseeventspy.h"
 
@@ -70,6 +71,7 @@ int main(int argc, char *argv[])
 
 
     FlipperDatabase myDatabase((QCoreApplication::applicationDirPath()+"/flipperDatabase.db"));
+    FlipperNotification aNotification("https://aws.essdepots.com",QCoreApplication::applicationDirPath()+"/flipperMonitoring.ini");
 
     GuiInterface aGuiInterface;
 
@@ -77,13 +79,16 @@ int main(int argc, char *argv[])
     QThread *backEndThread = new QThread();
     myDatabase.moveToThread(backEndThread);
     aFlipperInterface.moveToThread(backEndThread);
+    aNotification.moveToThread(backEndThread);
 
     // Connect everything
     QObject::connect(backEndThread,SIGNAL(started()),&myDatabase, SLOT(openDatabase()));
+    QObject::connect(backEndThread,SIGNAL(started()),&aNotification,SLOT(startServerWatchDog()));
     QObject::connect(&myDatabase,SIGNAL(out(QHash<int,QVariant>)),&aGuiInterface,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aGuiInterface,SIGNAL(toDatabase(QHash<int,QVariant>)),&myDatabase,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aGuiInterface,SIGNAL(toFlipperInterface(QHash<int,QVariant>)),&aFlipperInterface,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aFlipperInterface, SIGNAL(out(QHash<int,QVariant>)), &myDatabase, SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(&aFlipperInterface,SIGNAL(out(QHash<int,QVariant>)),&aNotification,SLOT(in(QHash<int,QVariant>)));
 
     backEndThread->start();
     QQmlContext *thisContext = engine.rootContext();

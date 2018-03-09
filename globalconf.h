@@ -2,9 +2,9 @@
 #define GLOBALCONF_H
 
 #include <QDebug>
-#define FlipperDatabaseDebug (0)
-#define FlipperInterfaceDebug (0)
-#define GuiInterfaceDebug (0)
+#define FlipperDatabaseDebug (1)
+#define FlipperInterfaceDebug (1)
+#define GuiInterfaceDebug (1)
 #define FlipperNotificationDebug (1)
 #include <QProcess>
 

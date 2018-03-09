@@ -268,27 +268,40 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
 {
 #if FlipperDatabaseDebug
     qDebug() << "FlipperDatabase::getNotSyncedDataFromDatabase()";
-    qDebug() << "Channel: " + QString::number(CH) + " timeStamp: " + QString::number(stoppedTimeStamp);
+    qDebug() << "Channel: " + QString::number(channels) + " timeStamp: " + QString::number(stoppedTimeStamp);
 #endif
 
     QList<QString> ChannelName;
     // will deal with all channels here; break package at 1000 data point
     if(channels & Channel1)
     {
+#if FlipperDatabaseDebug
+    qDebug() << "getNotSyncedData Channel 1";
+#endif
         ChannelName.append(FlipperChannelToString.value(Channel1));
     }
     if(channels & Channel2)
     {
+#if FlipperDatabaseDebug
+    qDebug() << "getNotSyncedData Channel 2";
+#endif
         ChannelName.append(FlipperChannelToString.value(Channel2));
     }
     if(channels & Channel3)
     {
+#if FlipperDatabaseDebug
+    qDebug() << "getNotSyncedData Channel 3";
+#endif
         ChannelName.append(FlipperChannelToString.value(Channel3));
     }
 
 
     for(int i = 0; i < ChannelName.count(); i++)
     {
+
+#if FlipperDatabaseDebug
+    qDebug() << "Enter creating data loop";
+#endif
         QSqlQuery aQuery;
         QJsonObject jSonpackage;
 
@@ -300,6 +313,7 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
 
         while(dataAvailable)
         {
+
             if(aQuery.exec("select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000"))
             {
                 if(aQuery.size() != 0 && aQuery.size() != -1 )
@@ -316,23 +330,23 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
                     package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
                     package.insert(FlipperKeywords::Notification, FlipperKeywords::getNotSyncedData);
                     package.insert(FlipperKeywords::getNotSyncedData, jSonpackage);
-
                     emit toFlipperNotificatoin(package);
-
                 }
                 else
                 {
+#if FlipperDatabaseDebug
+    qDebug() << " LoopsEnd , no new data available ";
+#endif
                     dataAvailable = false;
                 }
             }
             else
             {
+#if FlipperDatabaseDebug
+    qDebug() << " LoopsEnd , query failed ";
+#endif
                 dataAvailable = false;
             }
         }
-
     }
-
-
-
 }

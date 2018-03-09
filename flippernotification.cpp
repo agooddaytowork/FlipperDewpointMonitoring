@@ -210,6 +210,7 @@ void FlipperNotification::syncData( QJsonObject SendData)
         // reset the flag
 
         m_ChannelNotSynced = 0;
+        m_isLeftOverDataAvailable = false;
     }
 }
 

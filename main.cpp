@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
     QObject::connect(backEndThread,SIGNAL(started()),&myDatabase, SLOT(openDatabase()));
     QObject::connect(backEndThread,SIGNAL(started()),&aNotification,SLOT(startServerWatchDog()));
     QObject::connect(&myDatabase,SIGNAL(toGuiInterface(QHash<int,QVariant>)),&aGuiInterface,SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(&myDatabase,SIGNAL(toFlipperNotificatoin(QHash<int,QVariant>)),&aNotification,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aGuiInterface,SIGNAL(toDatabase(QHash<int,QVariant>)),&myDatabase,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aGuiInterface,SIGNAL(toFlipperInterface(QHash<int,QVariant>)),&aFlipperInterface,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aFlipperInterface, SIGNAL(out(QHash<int,QVariant>)), &myDatabase, SLOT(in(QHash<int,QVariant>)));

@@ -60,6 +60,10 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
 
             if(m_isLeftOverDataAvailable)
             {
+#if FlipperNotificationDebug
+            qDebug() << "Left Over Data detected; request data from Database ";
+#endif
+
                 // emit request to database for leftOverData
                 QHash<int,QVariant> package;
                 package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
@@ -173,6 +177,7 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
     }
     else
     {
+
         if(!m_isLeftOverDataAvailable)
         {
             m_isLeftOverDataAvailable = true;

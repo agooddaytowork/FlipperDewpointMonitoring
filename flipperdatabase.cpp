@@ -322,12 +322,12 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
             if(aQuery.exec("select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000"))
             {
 #if FlipperDatabaseDebug
-    qDebug() << " Checking Query size";
+    qDebug() << " Checking Query first";
 #endif
-                if(aQuery.size() != 0 && aQuery.size() != -1 )
+                if(aQuery.first())
                 {
 #if FlipperDatabaseDebug
-    qDebug() << " Checking Query size !=0 && != -1";
+    qDebug() << " Query result available";
 #endif
                     while(aQuery.next())
                     {

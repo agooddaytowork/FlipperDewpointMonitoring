@@ -15,9 +15,14 @@ class GuiInterface: public QObject
     Q_OBJECT
 
     Q_PROPERTY(bool isRecording READ isRecording WRITE setIsRecording NOTIFY isRecordingChanged)
+    Q_PROPERTY(bool isServerOnline READ isServerOnline WRITE setIsServerOnline NOTIFY isServerOnlineChanged)
+    Q_PROPERTY(bool isFlipperOnline READ isFlipperOnline WRITE setIsFlipperOnline NOTIFY isFlipperOnlineChanged)
+
     QHash<int, double> gaugeValueHash;
     QHash<int, QList<QPointF>> chartDataHash;
     bool m_isRecording;
+    bool m_isServerOnline;
+    bool m_isFlipperOnline;
 public:
     explicit GuiInterface( QObject * parent = nullptr);
 
@@ -42,6 +47,13 @@ public:
     bool isRecording() const;
     void setIsRecording(bool data);
 
+    bool isServerOnline() const;
+    void setIsServerOnline (bool data);
+
+    bool isFlipperOnline() const;
+    void setIsFlipperOnline(bool data);
+
+
 public slots:
 
     /*** PUBLIC SLOT THAT HANDLES DATA FROM OTHER MODULES ****/
@@ -52,6 +64,9 @@ signals:
     void toDatabase(const QHash<int,QVariant> &package);
     void toFlipperInterface(const QHash<int,QVariant> &package);
     void isRecordingChanged(bool);
+    void isServerOnlineChanged(bool);
+    void isFlipperOnlineChanged(bool);
+
 };
 
 #endif // GUIINTERFACE_H

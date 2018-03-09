@@ -103,12 +103,66 @@ ApplicationWindow {
                     onClicked: mainStackView.pop()
                 }
             }
+            Rectangle{
+                id: serverStatusIcon
+                width: 50
+                height: 50
+                anchors.left: parent.left
+                anchors.leftMargin: 100
+                opacity: mainStackView.depth >= 1 ? 1:0
+                anchors.verticalCenter: parent.verticalCenter
+                antialiasing: true
+                color: "transparent"
+                Image {
+                    id: serverStatusIconImage
+                    source: {
+                        if(theGuiInterface.isServerOnline)
+                        {
+                            "images/serverOnline.png"
+                        }
+                        else
+                        {
+                            "images/serverOffline.png"
+                        }
+                    }
+
+                    scale: 0.9
+                }
+            }
+
+            Rectangle{
+                id: flipperStatusIcon
+                width: 50
+                height: 50
+                anchors.left: parent.left
+                anchors.leftMargin: 150
+                opacity: mainStackView.depth >= 1 ? 1:0
+                anchors.verticalCenter: parent.verticalCenter
+                antialiasing: true
+                color: "transparent"
+                Image {
+                    id: flipperStatusIconImage
+                    source:{
+                        if(theGuiInterface.isFlipperOnline)
+                        {
+                            "images/flipperOnline.png"
+                        }
+                        else
+                        {
+                            "images/flipperOffline.png"
+                        }
+                    }
+
+                    scale: 0.9
+                }
+            }
+
 
             Rectangle{
                 id: recordButton
                 width: opacity ? 50 : 0
                 anchors.left: parent.left
-                anchors.leftMargin: 100
+                anchors.leftMargin: 200
                 opacity: mainStackView.depth >= 1 ? 1 : 0
                 anchors.verticalCenter: parent.verticalCenter
                 antialiasing: true

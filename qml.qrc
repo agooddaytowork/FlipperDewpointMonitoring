@@ -13,5 +13,9 @@
         <file>GaugePage.qml</file>
         <file>images/record.png</file>
         <file>images/record-active.png</file>
+        <file>images/flipperOffline.png</file>
+        <file>images/flipperOnline.png</file>
+        <file>images/serverOffline.png</file>
+        <file>images/serverOnline.png</file>
     </qresource>
 </RCC>

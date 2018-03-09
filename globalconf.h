@@ -3,10 +3,16 @@
 
 #include <QDebug>
 #define FlipperDatabaseDebug (1)
-#define FlipperInterfaceDebug (1)
-#define GuiInterfaceDebug (1)
+#define FlipperInterfaceDebug (0)
+#define GuiInterfaceDebug (0)
 #define FlipperNotificationDebug (1)
+
+#define UPDATE_DATA_SV_PATH "/KTproj/flipperdataupdatev2.php"
+#define SVWATCHDOGTIMER_INTERVAL 300000
+
 #include <QProcess>
+
+
 
 enum FlipperKeywords{
     PackageKey,
@@ -35,8 +41,16 @@ enum FlipperKeywords{
 
     // NotificationModule
     LastSampleTimePoint,
-    getNotSyncedData
+    getNotSyncedData,
 
+
+    // statusFlag
+
+    serverIsOffline,
+    serverIsOnline,
+
+    flipperIsOffline,
+    flipperIsOnline
 
 };
 

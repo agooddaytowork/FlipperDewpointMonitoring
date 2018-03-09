@@ -44,6 +44,8 @@ signals:
 
     void out(QHash<int,QVariant>);
     void FlipperTcpSettingChanged();
+    void toGuiInterface(QHash<int,QVariant>);
+
 private:
 
     static constexpr const quint32 m_CH1MeasureReleativeAddress = 0x0064;

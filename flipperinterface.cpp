@@ -217,7 +217,14 @@ void FlipperInterface::ModbusDeviceErrorHandler(QModbusDevice::Error error)
 #if FlipperInterfaceDebug
         qDebug() << "QModbus device errors ! skip; only handle Qmodbus:Connection error and Timeout error";
 #endif
-       modbusDevice->disconnectDevice();
+        modbusDevice->disconnectDevice();
+
+        QHash<int,QVariant> package;
+
+        package.insert(FlipperKeywords::PackageKey, FlipperKeywords::ModbusInterface);
+        package.insert(FlipperKeywords::ModbusInterface, FlipperKeywords::flipperIsOffline);
+
+        emit toGuiInterface(package);
         break;
     }
 
@@ -235,6 +242,13 @@ void FlipperInterface::onStateChanged(int state)
     {
         collectDataTimer->start();
         emitRequests();
+
+        QHash<int,QVariant> package;
+
+        package.insert(FlipperKeywords::PackageKey, FlipperKeywords::ModbusInterface);
+        package.insert(FlipperKeywords::ModbusInterface, FlipperKeywords::flipperIsOnline);
+
+        emit toGuiInterface(package);
     }
     else if(state == QModbusDevice::UnconnectedState)
     {
@@ -247,6 +261,8 @@ void FlipperInterface::onStateChanged(int state)
             attemptCounter = 0;
             // emit FATAL ERROR HERE  and STOP THE WHOLE PROGRAM
         }
+
+
     }
 
 }

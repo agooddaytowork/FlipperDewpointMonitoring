@@ -42,6 +42,8 @@ public slots:
 signals:
     void serverIsOnline();
     void toDatabase(QHash<int,QVariant>);
+    void toGuiInterface(QHash<int,QVariant>);
+
 };
 
 #endif // FLIPPERNOTIFICATION_H

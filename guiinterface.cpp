@@ -2,7 +2,7 @@
 
 #define GuiInterfaceDebug (0)
 /**** INTERNAL FUNCTIONS *****/
-GuiInterface::GuiInterface(QObject *parent): QObject(parent),m_isRecording(false)
+GuiInterface::GuiInterface(QObject *parent): QObject(parent),m_isRecording(false),m_isServerOnline(false),m_isFlipperOnline(false)
 {
 
 #if GuiInterfaceDebug
@@ -40,13 +40,40 @@ void GuiInterface::in(const QHash<int, QVariant> &data)
 #endif
 
 
-    switch (data.value(PackageKey).toInt()) {
-    case updateGauge:
+    switch (data.value(FlipperKeywords::PackageKey).toInt()) {
 
-        gaugeValueHash.insert(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(updateGauge).toDouble());
+    case FlipperKeywords::updateGauge:
+
+        gaugeValueHash.insert(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(FlipperKeywords::updateGauge).toDouble());
 
         break;
-    case updateChart:
+
+    case FlipperKeywords::ModbusInterface:
+
+        if(data.value(FlipperKeywords::ModbusInterface).toInt() == FlipperKeywords::flipperIsOffline)
+        {
+            setIsFlipperOnline(false);
+        }
+        else if (data.value(FlipperKeywords::ModbusInterface).toInt() == FlipperKeywords::flipperIsOnline)
+        {
+            setIsFlipperOnline(true);
+        }
+        break;
+
+    case FlipperKeywords::Notification:
+
+        if(data.value(FlipperKeywords::Notification).toInt() == FlipperKeywords::serverIsOffline)
+        {
+            setIsServerOnline(false);
+        }
+        else if(data.value(FlipperKeywords::Notification).toInt() == FlipperKeywords::serverIsOnline)
+        {
+            setIsServerOnline(true);
+        }
+        break;
+
+
+    case FlipperKeywords::updateChart:
 #if GuiInterfaceDebug
         qDebug() << "GUi Interface: update Chart data request - CH: " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt());
 #endif
@@ -61,10 +88,10 @@ void GuiInterface::in(const QHash<int, QVariant> &data)
 #if GuiInterfaceDebug
         qDebug() <<  data.value(FlipperKeywords::FlipperChannel).toInt();
 #endif
-
         chartDataHash.insert(data.value(FlipperKeywords::FlipperChannel).toInt(), tmpList);
 
         break;
+
 
     }
 }
@@ -216,4 +243,26 @@ void GuiInterface::stopRecording()
     QHash<int,QVariant> data;
     data.insert(PackageKey, FlipperKeywords::stopRecording);
     emit toFlipperInterface(data);
+}
+
+bool GuiInterface::isServerOnline() const
+{
+    return m_isServerOnline;
+}
+
+void GuiInterface::setIsServerOnline(bool data)
+{
+    m_isServerOnline = data;
+    emit isServerOnlineChanged(data);
+}
+
+void GuiInterface::setIsFlipperOnline(bool data)
+{
+    m_isFlipperOnline = data;
+    emit isFlipperOnlineChanged(data);
+}
+
+bool GuiInterface::isFlipperOnline() const
+{
+    return m_isFlipperOnline;
 }

@@ -1,6 +1,5 @@
 #include "flippernotification.h"
 
-#define UPDATE_DATA_SV_PATH "/KTproj/flipperdataupdatev2.php"
 
 FlipperNotification::FlipperNotification(const QString &svPath, const QString &settingPath, QObject *parent):
     QObject(parent), m_serverPath(svPath), m_isServerOnline(false), m_flipperSettingPath(settingPath), m_isLeftOverDataAvailable(false), m_lastTimePointToSyncWithServer(0),m_ChannelNotSynced(0)
@@ -23,7 +22,7 @@ void FlipperNotification::startServerWatchDog()
     QTimer *aTimer = new QTimer(this);
 
     QObject::connect(aTimer,SIGNAL(timeout()), this, SLOT(checkServerOnline()));
-    aTimer->start(300000); // check every 5 minutes
+    aTimer->start(SVWATCHDOGTIMER_INTERVAL); // check every 5 minutes
 }
 
 void FlipperNotification::checkServerOnline()
@@ -50,6 +49,8 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
         qDebug() << "status code: " + status_code.toString();
         qDebug() << "reply: " + reply->readAll();
 #endif
+
+        QHash<int,QVariant> package;
         switch (status_code.toInt()) {
         case 200:
 
@@ -65,15 +66,21 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
 #endif
 
                 // emit request to database for leftOverData
-                QHash<int,QVariant> package;
+                package.clear();
                 package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
                 package.insert(FlipperKeywords::Notification, FlipperKeywords::getNotSyncedData);
                 package.insert(FlipperKeywords::LastSampleTimePoint, m_lastTimePointToSyncWithServer);
                 package.insert(FlipperKeywords::FlipperChannel, m_ChannelNotSynced);
 
                 emit toDatabase(package);
-            }
 
+
+            }
+            package.clear();
+            package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
+            package.insert(FlipperKeywords::Notification, FlipperKeywords::serverIsOnline);
+
+            emit toGuiInterface(package);
             emit serverIsOnline();
             break;
 
@@ -96,11 +103,19 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
             qDebug() << "status code: " +status_code.toString();
 
 #endif
+            package.clear();
+            package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
+            package.insert(FlipperKeywords::Notification, FlipperKeywords::serverIsOffline);
+            emit toGuiInterface(package);
             m_isServerOnline = false;
             break;
 
             break;
         default:
+            package.clear();
+            package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
+            package.insert(FlipperKeywords::Notification, FlipperKeywords::serverIsOffline);
+            emit toGuiInterface(package);
             m_isServerOnline = false;
             break;
         }
@@ -110,6 +125,10 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
 #if FlipperNotificationDebug
         qDebug() << "FlipperNotification: SV path is not Valid, no returned valid HTTP status code ";
 #endif
+        QHash<int,QVariant> package;
+        package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
+        package.insert(FlipperKeywords::Notification, FlipperKeywords::serverIsOffline);
+        emit toGuiInterface(package);
         m_isServerOnline = false;
     }
 }

@@ -24,14 +24,13 @@ class FlipperNotification: public QObject
     quint64 m_lastTimePointToSyncWithServer;
     QString m_flipperSettingPath;
 
-
 public:
 
     explicit FlipperNotification(QString const &svPath, const QString &settingPath, QObject *parent = nullptr);
 
 
     void notifyServerNewDewPointAvailable(const int &CH, const double &dewPoint, const quint64 &timePoint);
-    void syncData(const QByteArray &data);
+    void syncData(QJsonObject data);
 public slots:
     void startServerWatchDog();
     void checkServerOnline();

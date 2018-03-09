@@ -6,6 +6,10 @@
 #include <QHash>
 #include <QList>
 #include "globalconf.h"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 
 class FlipperDatabase: public QObject
 {
@@ -25,6 +29,8 @@ class FlipperDatabase: public QObject
 
     void getLastDewPointFromDatabase(const int &CH);
     void getDewpointFromDatabase(const int &CH, const int &samples);
+    void getNotSyncedDataFromDatabase(const int &channels, const quint64 &stoppedTimeStamp);
+
 public:
     FlipperDatabase(const QString &databasePath, QObject * parent = nullptr);
     ~FlipperDatabase();
@@ -34,7 +40,8 @@ public slots:
     void openDatabase();
     void in(const QHash<int,QVariant> &input);
 signals:
-    void out(const QHash<int,QVariant> &output);
+    void toGuiInterface(const QHash<int,QVariant> &output);
+    void toFlipperNotificatoin(const QHash<int,QVariant> &output);
 };
 
 #endif // FLIPPERDATABASE_H

@@ -129,8 +129,8 @@ void FlipperNotification::in(const QHash<int, QVariant> &data)
     case FlipperKeywords::Notification:
         if(data.value(FlipperKeywords::Notification).toInt() == FlipperKeywords::getNotSyncedData)
         {
-            //  get a big Json to QByteArray here for conveninent :D
-            syncData(data.value(FlipperKeywords::getNotSyncedData).toByteArray());
+            //  get a big QJsonObject here for conveninent :D
+            syncData(data.value(FlipperKeywords::getNotSyncedData).toJsonObject());
         }
     default:
         break;
@@ -184,7 +184,7 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
 }
 
 
-void FlipperNotification::syncData(const QByteArray &data)
+void FlipperNotification::syncData( QJsonObject SendData)
 {
 #if FlipperNotificationDebug
     qDebug() << "syncData::notifyServerNewDewPointAvailable()";
@@ -192,6 +192,13 @@ void FlipperNotification::syncData(const QByteArray &data)
 
     if(m_isServerOnline)
     {
+
+        QSettings m_setting(m_flipperSettingPath, QSettings::IniFormat);
+
+       SendData.insert("MAC", m_setting.value("eth0MacAddress").toString().remove(QRegExp("[\\:]")));
+
+         QByteArray data = QJsonDocument(SendData).toJson();
+
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 

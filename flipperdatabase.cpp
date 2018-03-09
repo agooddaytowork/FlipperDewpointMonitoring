@@ -140,13 +140,20 @@ void FlipperDatabase::processPackage(const QHash<int, QVariant> &data)
         else if (data.value(FlipperKeywords::GUI).toInt() == FlipperKeywords::updateChart) {
             // get multiple Dew Point of CHs
 #if FlipperDatabaseDebug
-             qDebug()<< "Flipper Database: requestUpdateChart() - CH = " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt());
+            qDebug()<< "Flipper Database: requestUpdateChart() - CH = " + QString::number(data.value(FlipperKeywords::FlipperChannel).toInt());
 #endif
             getDewpointFromDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), 3000);
         }
         break;
 
     case FlipperKeywords::Notification:
+        if(data.value(FlipperKeywords::Notification).toInt()  == FlipperKeywords::getNotSyncedData)
+        {
+
+            getNotSyncedDataFromDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(FlipperKeywords::LastSampleTimePoint).toULongLong());
+
+        }
+
         break;
 
     default:
@@ -178,14 +185,14 @@ void FlipperDatabase::insertDewPointToDatabase(const int &CH, const double &valu
         package.insert(FlipperChannel, CH);
         package.insert(updateGauge, value);
 
-        emit out(package);
+        emit toGuiInterface(package);
 
         package.clear();
         package.insert(PackageKey, updateChart);
         package.insert(FlipperChannel, CH);
         package.insert(updateChart, QPointF(timePoint, value));
 
-        emit out(package);
+        emit toGuiInterface(package);
     }
     else
     {
@@ -221,7 +228,7 @@ void FlipperDatabase::getLastDewPointFromDatabase(const int &CH)
             package.insert(PackageKey, updateGauge);
             package.insert(FlipperChannel, CH);
             package.insert(updateGauge, aQuery.value("data").toDouble());
-            emit out(package);
+            emit toGuiInterface(package);
         }
     }
     else
@@ -246,13 +253,86 @@ void FlipperDatabase::getDewpointFromDatabase(const int &CH, const int &samples)
         {
             QHash<int, QVariant> package;
 #if FlipperDatabaseDebug
-    qDebug() << "timeStamp: " + QString::number(aQuery.value("timeStamp").toULongLong()) + " data: " + QString::number(aQuery.value("data").toDouble());
+            qDebug() << "timeStamp: " + QString::number(aQuery.value("timeStamp").toULongLong()) + " data: " + QString::number(aQuery.value("data").toDouble());
 
 #endif
             package.insert(PackageKey, updateChart);
             package.insert(FlipperChannel, CH);
             package.insert(updateChart, QPointF((quint64) aQuery.value("timeStamp").toULongLong(),aQuery.value("data").toDouble()));
-            emit out(package);
+            emit toGuiInterface(package);
         }
     }
+}
+
+void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const quint64 &stoppedTimeStamp)
+{
+#if FlipperDatabaseDebug
+    qDebug() << "FlipperDatabase::getNotSyncedDataFromDatabase()";
+    qDebug() << "Channel: " + QString::number(CH) + " timeStamp: " + QString::number(stoppedTimeStamp);
+#endif
+
+    QList<QString> ChannelName;
+    // will deal with all channels here; break package at 1000 data point
+    if(channels & Channel1)
+    {
+        ChannelName.append(FlipperChannelToString.value(Channel1));
+    }
+    if(channels & Channel2)
+    {
+        ChannelName.append(FlipperChannelToString.value(Channel2));
+    }
+    if(channels & Channel3)
+    {
+        ChannelName.append(FlipperChannelToString.value(Channel3));
+    }
+
+
+    for(int i = 0; i < ChannelName.count(); i++)
+    {
+        QSqlQuery aQuery;
+        QJsonObject jSonpackage;
+
+        jSonpackage.insert("Channel", FlipperChannelToString.key(ChannelName.at(i)));
+
+        QJsonArray data;
+        QString lastTimeStamp=QString::number(stoppedTimeStamp);
+        bool dataAvailable=true;
+
+        while(dataAvailable)
+        {
+            if(aQuery.exec("select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000"))
+            {
+                if(aQuery.size() != 0 && aQuery.size() != -1 )
+                {
+                    while(aQuery.next())
+                    {
+                        data << QJsonObject{{aQuery.value("timeStamp").toString(),aQuery.value("data").toDouble()}};
+                        lastTimeStamp = aQuery.value("timeStamp").toString();
+                    }
+
+                    jSonpackage.insert("Data", data);
+
+                    QHash<int,QVariant> package;
+                    package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
+                    package.insert(FlipperKeywords::Notification, FlipperKeywords::getNotSyncedData);
+                    package.insert(FlipperKeywords::getNotSyncedData, jSonpackage);
+
+                    emit toFlipperNotificatoin(package);
+
+                }
+                else
+                {
+                    dataAvailable = false;
+                }
+            }
+            else
+            {
+                dataAvailable = false;
+            }
+        }
+
+    }
+
+
+
 }

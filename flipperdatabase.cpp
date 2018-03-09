@@ -315,11 +315,20 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
 
         while(dataAvailable)
         {
+#if FlipperDatabaseDebug
 
+    qDebug() << "Query Statment: select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000";
+#endif
             if(aQuery.exec("select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000"))
             {
+#if FlipperDatabaseDebug
+    qDebug() << " Checking Query size";
+#endif
                 if(aQuery.size() != 0 && aQuery.size() != -1 )
                 {
+#if FlipperDatabaseDebug
+    qDebug() << " Checking Query size !=0 && != -1";
+#endif
                     while(aQuery.next())
                     {
                         data << QJsonObject{{aQuery.value("timeStamp").toString(),aQuery.value("data").toDouble()}};
@@ -332,6 +341,9 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
                     package.insert(FlipperKeywords::PackageKey, FlipperKeywords::Notification);
                     package.insert(FlipperKeywords::Notification, FlipperKeywords::getNotSyncedData);
                     package.insert(FlipperKeywords::getNotSyncedData, jSonpackage);
+#if FlipperDatabaseDebug
+    qDebug() << " Emitting syncing package to Notification Module";
+#endif
                     emit toFlipperNotificatoin(package);
                 }
                 else

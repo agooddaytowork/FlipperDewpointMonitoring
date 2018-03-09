@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
     QObject::connect(&aGuiInterface,SIGNAL(toFlipperInterface(QHash<int,QVariant>)),&aFlipperInterface,SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aFlipperInterface, SIGNAL(out(QHash<int,QVariant>)), &myDatabase, SLOT(in(QHash<int,QVariant>)));
     QObject::connect(&aFlipperInterface,SIGNAL(out(QHash<int,QVariant>)),&aNotification,SLOT(in(QHash<int,QVariant>)));
+    QObject::connect(&aNotification, SIGNAL(toDatabase(QHash<int,QVariant>)),&myDatabase,SLOT(in(QHash<int,QVariant>)));
 
     backEndThread->start();
     QQmlContext *thisContext = engine.rootContext();

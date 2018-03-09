@@ -149,7 +149,9 @@ void FlipperDatabase::processPackage(const QHash<int, QVariant> &data)
     case FlipperKeywords::Notification:
         if(data.value(FlipperKeywords::Notification).toInt()  == FlipperKeywords::getNotSyncedData)
         {
-
+#if FlipperDatabaseDebug
+            qDebug() << "Flipper Database: getNotSyncedDataFromDatabase()";
+#endif
             getNotSyncedDataFromDatabase(data.value(FlipperKeywords::FlipperChannel).toInt(), data.value(FlipperKeywords::LastSampleTimePoint).toULongLong());
 
         }

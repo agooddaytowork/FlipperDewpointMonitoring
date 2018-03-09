@@ -177,12 +177,15 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
     }
     else
     {
-
+#if FlipperNotificationDebug
+    qDebug() << "SV is offline ";
+#endif
+        m_ChannelNotSynced |= CH;
         if(!m_isLeftOverDataAvailable)
         {
             m_isLeftOverDataAvailable = true;
             m_lastTimePointToSyncWithServer = timePoint;
-            m_ChannelNotSynced |= CH;
+
         }
     }
 
@@ -192,7 +195,7 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
 void FlipperNotification::syncData( QJsonObject SendData)
 {
 #if FlipperNotificationDebug
-    qDebug() << "syncData::notifyServerNewDewPointAvailable()";
+    qDebug() << "syncData::()";
 #endif
 
     if(m_isServerOnline)

@@ -8,8 +8,8 @@
 #define FlipperNotificationDebug (1)
 
 #define UPDATE_DATA_SV_PATH "/KTproj/flipperdataupdatev2.php"
-#define SVWATCHDOGTIMER_INTERVAL 300000
-
+//#define SVWATCHDOGTIMER_INTERVAL 200000
+//#define FLIPPERINTERFACECOLLECTDATA_INTERVAL 60000
 #include <QProcess>
 
 

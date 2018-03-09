@@ -2,7 +2,7 @@
 
 
 FlipperNotification::FlipperNotification(const QString &svPath, const QString &settingPath, QObject *parent):
-    QObject(parent), m_serverPath(svPath), m_isServerOnline(false), m_flipperSettingPath(settingPath), m_isLeftOverDataAvailable(false), m_lastTimePointToSyncWithServer(0),m_ChannelNotSynced(0)
+    QObject(parent), m_serverPath(svPath), m_isServerOnline(false), m_flipperSettingPath(settingPath), m_isLeftOverDataAvailable(false), m_lastTimePointToSyncWithServer(0),m_ChannelNotSynced(0), m_SVWatchDOGTimerInterval(300000)
 {
 
 #if FlipperNotificationDebug
@@ -17,12 +17,14 @@ void FlipperNotification::startServerWatchDog()
 
 #if FlipperNotificationDebug
     qDebug() << "FlipperNotification::startServerWatchDog()";
+    qDebug() << QString::number(m_SVWatchDOGTimerInterval);
 #endif
     checkServerOnline();
-    QTimer *aTimer = new QTimer(this);
 
-    QObject::connect(aTimer,SIGNAL(timeout()), this, SLOT(checkServerOnline()));
-    aTimer->start(SVWATCHDOGTIMER_INTERVAL); // check every 5 minutes
+    svWatchDogTimer = new QTimer(this);
+
+    QObject::connect(svWatchDogTimer,SIGNAL(timeout()), this, SLOT(checkServerOnline()));
+    svWatchDogTimer->start(m_SVWatchDOGTimerInterval);
 }
 
 void FlipperNotification::checkServerOnline()
@@ -31,6 +33,16 @@ void FlipperNotification::checkServerOnline()
     QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 
     manager->get(QNetworkRequest(QUrl(m_serverPath)));
+
+}
+
+void FlipperNotification::setSVWatchDogTimerInterVal(int interval)
+{
+    if(m_SVWatchDOGTimerInterval != interval)
+    {
+        m_SVWatchDOGTimerInterval = interval;
+
+    }
 
 }
 
@@ -62,7 +74,7 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
             if(m_isLeftOverDataAvailable)
             {
 #if FlipperNotificationDebug
-            qDebug() << "Left Over Data detected; request data from Database ";
+                qDebug() << "Left Over Data detected; request data from Database ";
 #endif
 
                 // emit request to database for leftOverData
@@ -184,7 +196,7 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 #if FlipperNotificationDebug
-    qDebug() << "SV path: " + m_serverPath+UPDATE_DATA_SV_PATH;
+        qDebug() << "SV path: " + m_serverPath+UPDATE_DATA_SV_PATH;
 #endif
 
         QUrl url(m_serverPath + UPDATE_DATA_SV_PATH);
@@ -197,7 +209,7 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
     else
     {
 #if FlipperNotificationDebug
-    qDebug() << "SV is offline ";
+        qDebug() << "SV is offline ";
 #endif
         m_ChannelNotSynced |= CH;
         if(!m_isLeftOverDataAvailable)
@@ -222,9 +234,9 @@ void FlipperNotification::syncData( QJsonObject SendData)
 
         QSettings m_setting(m_flipperSettingPath, QSettings::IniFormat);
 
-       SendData.insert("MAC", m_setting.value("eth0MacAddress").toString().remove(QRegExp("[\\:]")));
+        SendData.insert("MAC", m_setting.value("eth0MacAddress").toString().remove(QRegExp("[\\:]")));
 
-         QByteArray data = QJsonDocument(SendData).toJson();
+        QByteArray data = QJsonDocument(SendData).toJson();
 
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));

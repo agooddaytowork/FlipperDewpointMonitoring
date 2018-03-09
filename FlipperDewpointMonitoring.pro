@@ -10,7 +10,6 @@ SOURCES += main.cpp \
     onlinedbinterface.cpp \
     radialbar.cpp \
     flippersettings.cpp \
-    flippersettingmodel.cpp \
     flipperdatabase.cpp \
     guiinterface.cpp \
     mouseeventspy.cpp \
@@ -46,7 +45,6 @@ HEADERS += \
     onlinedbinterface.h \
     radialbar.h \
     flippersettings.h \
-    flippersettingmodel.h \
     globalconf.h \
     flipperdatabase.h \
     guiinterface.h \

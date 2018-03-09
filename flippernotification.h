@@ -23,6 +23,9 @@ class FlipperNotification: public QObject
     int m_ChannelNotSynced;
     quint64 m_lastTimePointToSyncWithServer;
     QString m_flipperSettingPath;
+    int m_SVWatchDOGTimerInterval;
+
+    QTimer *svWatchDogTimer;
 
 public:
 
@@ -31,6 +34,7 @@ public:
 
     void notifyServerNewDewPointAvailable(const int &CH, const double &dewPoint, const quint64 &timePoint);
     void syncData(QJsonObject data);
+    void setSVWatchDogTimerInterVal(int interval);
 public slots:
     void startServerWatchDog();
     void checkServerOnline();

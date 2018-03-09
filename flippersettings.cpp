@@ -37,8 +37,23 @@ void FlipperSetting::loadSettingFromFile()
     if(!m_setting.contains("NotificationMailPassword")) m_setting.setValue("NotificationMailPassword", "default");
     if(!m_setting.contains("autoStart")) m_setting.setValue("autoStart", "false");
     if(!m_setting.contains("lockScreenPassword")) m_setting.setValue("lockScreenPassword", "1234");
+    if(!m_setting.contains("SVWatchDogTimerInterval")) m_setting.setValue("SVWatchDogTimerInterval", 300000);
+    if(!m_setting.contains("flipperInterfaceCollectDataInterval")) m_setting.setValue("flipperInterfaceCollectDataInterval",60000);
 
 }
+
+int FlipperSetting::getSVWatchDogTimerInterval() const
+{
+    QSettings m_setting(m_settingPath, QSettings::IniFormat);
+    return m_setting.value("SVWatchDogTimerInterval").toInt();
+}
+
+int FlipperSetting::getFlipperInterfaceCollectDataInterval() const
+{
+    QSettings m_setting(m_settingPath, QSettings::IniFormat);
+    return m_setting.value("flipperInterfaceCollectDataInterval").toInt();
+}
+
 
 int FlipperSetting::getid() const{
 

@@ -26,7 +26,8 @@ class FlipperNotification: public QObject
     int m_SVWatchDOGTimerInterval;
 
     QTimer *svWatchDogTimer;
-    QNetworkAccessManager *aNetworkManager;
+    QNetworkAccessManager *m_networkManager;
+    QNetworkReply *m_reply;
 
 public:
 
@@ -39,7 +40,7 @@ public:
 public slots:
     void startServerWatchDog();
     void checkServerOnline();
-    void serverReplyHandler(QNetworkReply* reply);
+    void serverReplyHandler();
     void in(const QHash<int,QVariant> &data);
 
 

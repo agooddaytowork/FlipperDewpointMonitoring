@@ -9,8 +9,10 @@ FlipperNotification::FlipperNotification(const QString &svPath, const QString &s
     qDebug() << "FlipperNotification::FlipperNotification()";
 #endif
 
-    aNetworkManager = new QNetworkAccessManager(this);
-    QObject::connect(aNetworkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
+    m_networkManager = new QNetworkAccessManager(this);
+
+    //    m_networkManager = new QNetworkAccessManager(this);
+
 }
 
 
@@ -31,11 +33,11 @@ void FlipperNotification::startServerWatchDog()
 
 void FlipperNotification::checkServerOnline()
 {
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
+    //    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    //    QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 
-    manager->get(QNetworkRequest(QUrl(m_serverPath)));
-
+    m_reply =  m_networkManager->get(QNetworkRequest(QUrl(m_serverPath)));
+    QObject::connect(m_reply,SIGNAL(finished()),this,SLOT(serverReplyHandler()));
 }
 
 void FlipperNotification::setSVWatchDogTimerInterVal(int interval)
@@ -49,19 +51,19 @@ void FlipperNotification::setSVWatchDogTimerInterVal(int interval)
 }
 
 
-void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
+void FlipperNotification::serverReplyHandler()
 {
 
 #if FlipperNotificationDebug
     qDebug() << "FlipperNotification: serverReplyHandler() ";
 #endif
-    QVariant status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    QVariant status_code = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
 
     if(status_code.isValid())
     {
 #if FlipperNotificationDebug
         qDebug() << "status code: " + status_code.toString();
-        qDebug() << "reply: " + reply->readAll();
+        qDebug() << "reply: " + m_reply->readAll();
 #endif
 
         QHash<int,QVariant> package;
@@ -145,6 +147,8 @@ void FlipperNotification::serverReplyHandler(QNetworkReply *reply)
         emit toGuiInterface(package);
         m_isServerOnline = false;
     }
+
+    m_reply->deleteLater();
 }
 
 
@@ -195,8 +199,8 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
 
     if(m_isServerOnline)
     {
-//        aNetworkManager = new QNetworkAccessManager(this);
-//        QObject::connect(aNetworkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
+        //        m_networkManager = new QNetworkAccessManager(this);
+        //        QObject::connect(m_networkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 #if FlipperNotificationDebug
         qDebug() << "SV path: " + m_serverPath+UPDATE_DATA_SV_PATH;
 #endif
@@ -206,7 +210,8 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
 
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-        aNetworkManager->post(request, data);
+        m_reply = m_networkManager->post(request, data);
+        QObject::connect(m_reply,SIGNAL(finished()),this,SLOT(serverReplyHandler()));
     }
     else
     {
@@ -240,14 +245,14 @@ void FlipperNotification::syncData( QJsonObject SendData)
 
         QByteArray data = QJsonDocument(SendData).toJson();
 
-//        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-//        QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
+        //        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        //        QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 
         QUrl url(m_serverPath + UPDATE_DATA_SV_PATH);
         QNetworkRequest request(url);
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        aNetworkManager->post(request, data);
-
+        m_reply = m_networkManager->post(request, data);
+        QObject::connect(m_reply,SIGNAL(finished()),this,SLOT(serverReplyHandler()));
         // reset the flag
 
         m_ChannelNotSynced = 0;

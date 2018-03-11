@@ -26,6 +26,7 @@ class FlipperNotification: public QObject
     int m_SVWatchDOGTimerInterval;
 
     QTimer *svWatchDogTimer;
+    QNetworkAccessManager *aNetworkManager;
 
 public:
 

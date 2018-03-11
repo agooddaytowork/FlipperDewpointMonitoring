@@ -9,6 +9,8 @@ FlipperNotification::FlipperNotification(const QString &svPath, const QString &s
     qDebug() << "FlipperNotification::FlipperNotification()";
 #endif
 
+    aNetworkManager = new QNetworkAccessManager(this);
+    QObject::connect(aNetworkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 }
 
 
@@ -193,8 +195,8 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
 
     if(m_isServerOnline)
     {
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
+//        aNetworkManager = new QNetworkAccessManager(this);
+//        QObject::connect(aNetworkManager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 #if FlipperNotificationDebug
         qDebug() << "SV path: " + m_serverPath+UPDATE_DATA_SV_PATH;
 #endif
@@ -204,7 +206,7 @@ void FlipperNotification::notifyServerNewDewPointAvailable(const int &CH, const 
 
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-        manager->post(request, data);
+        aNetworkManager->post(request, data);
     }
     else
     {
@@ -238,13 +240,13 @@ void FlipperNotification::syncData( QJsonObject SendData)
 
         QByteArray data = QJsonDocument(SendData).toJson();
 
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
+//        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+//        QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(serverReplyHandler(QNetworkReply*)));
 
         QUrl url(m_serverPath + UPDATE_DATA_SV_PATH);
         QNetworkRequest request(url);
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        manager->post(request, data);
+        aNetworkManager->post(request, data);
 
         // reset the flag
 

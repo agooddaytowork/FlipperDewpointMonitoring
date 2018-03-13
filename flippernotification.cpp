@@ -11,7 +11,7 @@ FlipperNotification::FlipperNotification(const QString &svPath, const QString &s
 
     m_networkManager = new QNetworkAccessManager(this);
 
-    //    m_networkManager = new QNetworkAccessManager(this);
+
 
 }
 

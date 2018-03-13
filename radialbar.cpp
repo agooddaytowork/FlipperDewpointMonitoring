@@ -134,7 +134,7 @@ void RadialBar::paint(QPainter *painter)
     painter->save();
     pen.setWidth(m_DialWidth);
     pen.setColor(m_ProgressColor);
-    qreal valueAngle = ((m_Value - m_MinValue)/(m_MaxValue - m_MinValue)) * spanAngle;  //Map value to angle range
+    qreal valueAngle = ((m_Value*(-1) - m_MinValue)/(m_MaxValue - m_MinValue)) * spanAngle;  //Map value to angle range
     painter->setPen(pen);
     painter->drawArc(rect.adjusted(offset, offset, -offset, -offset), startAngle * 16, valueAngle * 16);
     painter->restore();

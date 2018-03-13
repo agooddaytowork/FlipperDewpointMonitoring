@@ -501,7 +501,7 @@ Item
 
 
                     Repeater{
-                        model: 6
+                        model: 3
                         Rectangle{
                             enabled: !theGuiInterface.isRecording
                             width: 250
@@ -581,49 +581,49 @@ Item
             }
 
         }
-        Gradient {
-            id: channelOffGradient
-            GradientStop {
-                position: 0.0
-                SequentialAnimation on color {
-                    loops: Animation.Infinite
-                    ColorAnimation { from: "#14148c"; to: "#0E1533"; duration: 5000 }
-                    ColorAnimation { from: "#0E1533"; to: "#14148c"; duration: 5000 }
-                }
-            }
-            GradientStop {
-                position: 2.0
-                SequentialAnimation on color {
-                    loops: Animation.Infinite
-                    ColorAnimation { from: "#14aaff"; to: "#437284"; duration: 5000 }
-                    ColorAnimation { from: "#437284"; to: "#14aaff"; duration: 5000 }
-                }
-            }
-        }
+//        Gradient {
+//            id: channelOffGradient
+//            GradientStop {
+//                position: 0.0
+//                SequentialAnimation on color {
+//                    loops: Animation.Infinite
+//                    ColorAnimation { from: "#14148c"; to: "#0E1533"; duration: 5000 }
+//                    ColorAnimation { from: "#0E1533"; to: "#14148c"; duration: 5000 }
+//                }
+//            }
+//            GradientStop {
+//                position: 2.0
+//                SequentialAnimation on color {
+//                    loops: Animation.Infinite
+//                    ColorAnimation { from: "#14aaff"; to: "#437284"; duration: 5000 }
+//                    ColorAnimation { from: "#437284"; to: "#14aaff"; duration: 5000 }
+//                }
+//            }
+//        }
 
 
-        Gradient {
-            id: channelOnGradient
-            GradientStop {
-                position: 1.0
-                SequentialAnimation on color {
-                    loops: Animation.Infinite
-                    ColorAnimation { from: "#4ba84c"; to: "#16dd18"; duration: 5000 }
-                    ColorAnimation { from: "#16dd18"; to: "#4ba84c"; duration: 5000 }
+//        Gradient {
+//            id: channelOnGradient
+//            GradientStop {
+//                position: 1.0
+//                SequentialAnimation on color {
+//                    loops: Animation.Infinite
+//                    ColorAnimation { from: "#4ba84c"; to: "#16dd18"; duration: 5000 }
+//                    ColorAnimation { from: "#16dd18"; to: "#4ba84c"; duration: 5000 }
 
-                }
-            }
+//                }
+//            }
 
-            GradientStop {
-                position: 0.0
-                SequentialAnimation on color {
-                    loops: Animation.Infinite
-                    ColorAnimation { from: "#62a060"; to: "#2ea32a"; duration: 5000 }
-                    ColorAnimation { from: "#2ea32a"; to: "#62a060"; duration: 5000 }
+//            GradientStop {
+//                position: 0.0
+//                SequentialAnimation on color {
+//                    loops: Animation.Infinite
+//                    ColorAnimation { from: "#62a060"; to: "#2ea32a"; duration: 5000 }
+//                    ColorAnimation { from: "#2ea32a"; to: "#62a060"; duration: 5000 }
 
-                }
-            }
-        }
+//                }
+//            }
+//        }
 
         // KEYBOARD SECTIONS
 

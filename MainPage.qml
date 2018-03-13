@@ -44,8 +44,8 @@ Item {
                 progressColor: "#333333"
                 foregroundColor: "#333333"
                 dialWidth: 12
-                minValue: -100
-                maxValue: 10
+                minValue: 0
+                maxValue: 100
                 value: theValue
                 suffixText: "°C"
                 textFont {

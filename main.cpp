@@ -68,6 +68,9 @@ int main(int argc, char *argv[])
     FlipperInterface aFlipperInterface(aFlipperSetting.getFlipperIp(), aFlipperSetting.getFlipperPort(), aFlipperSetting.getSVAddress());
     aFlipperInterface.setEnableChannels(aFlipperSetting.getChannelEnable());
     aFlipperInterface.setCollectDataInterval(aFlipperSetting.getFlipperInterfaceCollectDataInterval());
+    aFlipperInterface.setDecimalValue(Channel1, aFlipperSetting.getCH1DecimalPoint());
+    aFlipperInterface.setDecimalValue(Channel2, aFlipperSetting.getCH1DecimalPoint());
+    aFlipperInterface.setDecimalValue(Channel3, aFlipperSetting.getCH1DecimalPoint());
 
 
 

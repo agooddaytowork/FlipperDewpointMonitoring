@@ -49,7 +49,7 @@ Item {
                 value: theValue
                 suffixText: "°C"
                 textFont {
-                    family: "Halvetica"
+                    family: "Helvetica"
                     italic: false
                     pointSize: 18
                 }

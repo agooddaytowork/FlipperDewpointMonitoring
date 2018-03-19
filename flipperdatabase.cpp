@@ -319,13 +319,13 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
 
     qDebug() << "Query Statment: select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000";
 #endif
-            if(aQuery.exec("select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000"))
+            if(aQuery.exec("select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp))
             {
 #if FlipperDatabaseDebug
     qDebug() << " Checking Query first";
 #endif
-                if(aQuery.first())
-                {
+//                if(aQuery.first())
+//                {
 #if FlipperDatabaseDebug
     qDebug() << " Query result available";
 #endif
@@ -345,14 +345,14 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
     qDebug() << " Emitting syncing package to Notification Module";
 #endif
                     emit toFlipperNotificatoin(package);
-                }
-                else
-                {
-#if FlipperDatabaseDebug
-    qDebug() << " LoopsEnd , no new data available ";
-#endif
-                    dataAvailable = false;
-                }
+//                }
+//                else
+//                {
+//#if FlipperDatabaseDebug
+//    qDebug() << " LoopsEnd , no new data available ";
+//#endif
+//                    dataAvailable = false;
+//                }
             }
             else
             {

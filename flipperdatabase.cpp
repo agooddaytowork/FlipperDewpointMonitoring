@@ -313,8 +313,8 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
         QString lastTimeStamp=QString::number(stoppedTimeStamp);
         bool dataAvailable=true;
 
-        while(dataAvailable)
-        {
+//        while(dataAvailable)
+//        {
 #if FlipperDatabaseDebug
 
     qDebug() << "Query Statment: select * from " + ChannelName.at(i) + " where timeStamp > " + lastTimeStamp + " limit 1000";
@@ -362,5 +362,5 @@ void FlipperDatabase::getNotSyncedDataFromDatabase(const int &channels, const qu
                 dataAvailable = false;
             }
         }
-    }
+//    }
 }
